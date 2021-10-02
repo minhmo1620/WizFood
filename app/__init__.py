@@ -5,14 +5,15 @@ from werkzeug.exceptions import HTTPException
 from .db import db
 from .models.users import UserModel
 
-ENV_TO_CONFIG = {"dev": "app.configs.dev.DevelopmentConfig",
+ENV_TO_CONFIG = {"test": "app.configs.test.TestingConfig",
+                 "dev": "app.configs.dev.DevelopmentConfig",
                  "local": "app.configs.local.LocalConfig"}
 
 
 def create_app(env):
     app = Flask(__name__)
     if env not in ENV_TO_CONFIG:
-        raise ValueError("Please choose the correct environment: dev/local")
+        raise ValueError("Please choose the correct environment: test/dev/local")
     app.config.from_object(ENV_TO_CONFIG[env])
     db.init_app(app)
 
@@ -33,6 +34,6 @@ def create_app(env):
     return app
 
 
-env = os.environ.get("ENV", "development")
+env = os.environ.get("ENV", "dev")
 app = create_app(env)
 app.app_context().push()

@@ -5,18 +5,17 @@ from app.models.users import UserModel
 from app.helpers import hash_password, create_salt
 from app.db import db
 
-secret_key = current_app.config["SECRET_KEY"]
-
 
 def create_dummy_user(username, password):
     user = db.session.query(UserModel).filter(UserModel.username == username).first()
+    secret_key = current_app.config["SECRET_KEY"]
     if not user:
         salt = create_salt()
         hashed_password = hash_password(password + salt)
 
         new_user = UserModel(username, hashed_password, salt)
 
-        token = jwt.encode({"user": username}, secret_key).decode("UTF-8")
+        token = jwt.encode({"user": username}, secret_key)
 
         db.session.add(new_user)
         db.session.commit()
@@ -24,7 +23,7 @@ def create_dummy_user(username, password):
         return token
     if user.password != hash_password(password + user.salt):
         return 401
-    return jwt.encode({"user": username}, secret_key).decode("UTF-8")
+    return jwt.encode({"user": username}, secret_key)
 
 
 def create_headers(token):
