@@ -5,6 +5,9 @@ from pyswip.easy import *
 from app.controllers.model_helpers import *
 from app.controllers.KB import ModelConfig
 
+import swiplserver
+from swiplserver import PrologMQI, PrologThread
+
 
 def run_model(user_answer):
     asked = {}
@@ -102,7 +105,14 @@ def run_model(user_answer):
     os.unlink(name)  # Remove the temporary file
 
     call(retractall(known))
-    recommend = [s for s in prolog.query("recommend(D).")]
+    # recommend = [s for s in prolog.query("recommend(D).")]
+    with PrologMQI(
+        port=26202
+    ) as server:
+        with server.create_thread() as prolog_thread:
+            recommend = [s for s in prolog_thread.query("recommend(D).")]
+            print(recommend)
+
     if recommend:
         res = []
         for i in recommend:
@@ -116,3 +126,4 @@ def run_model(user_answer):
 
 
 print(run_model(["asian", "yes", "no", "yes", "yes", "vietnam", 600]))
+

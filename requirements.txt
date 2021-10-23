@@ -9,4 +9,4 @@ pytest == 6.2.5
 pyswip == 0.2.10
 Flask-Threads == 0.1.0
 py-object-pool == 1.1
-SQLAlchemy~=1.4.25
+swiplserver == 1.0.0
