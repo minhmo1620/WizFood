@@ -3,10 +3,9 @@ from pyswip.prolog import Prolog
 from pyswip.easy import *
 
 from app.controllers.model_helpers import *
-from app.controllers.KB import ModelConfig
-
-import swiplserver
-from swiplserver import PrologMQI, PrologThread
+# from app.controllers.KB import ModelConfig
+# from model_helpers import *
+# from KB import ModelConfig
 
 
 def run_model(user_answer):
@@ -17,7 +16,7 @@ def run_model(user_answer):
 
     # Define foreign functions for getting user input and writing to the screen
     def write_py(X):
-        sys.stdout.flush()
+        # sys.stdout.flush()
         return True
 
     def read_py_ask(A, V, Y):
@@ -98,21 +97,15 @@ def run_model(user_answer):
     registerForeign(write_py)
 
     # Create a temporary file with the KB in it
-    (FD, name) = tempfile.mkstemp(suffix='.pl', text=True)
-    with os.fdopen(FD, "w") as text_file:
-        text_file.write(ModelConfig.KB)
+    # (FD, name) = tempfile.mkstemp(suffix='.pl', text=True)
+    # with os.fdopen(FD, "w") as text_file:
+    #     text_file.write(ModelConfig.KB)
+    name = 'app/controllers/KB.pl'
     prolog.consult(name)  # open the KB for consulting
-    os.unlink(name)  # Remove the temporary file
+    # os.unlink(name)  # Remove the temporary file
 
     call(retractall(known))
-    # recommend = [s for s in prolog.query("recommend(D).")]
-    with PrologMQI(
-        port=26202
-    ) as server:
-        with server.create_thread() as prolog_thread:
-            recommend = [s for s in prolog_thread.query("recommend(D).")]
-            print(recommend)
-
+    recommend = [s for s in prolog.query("recommend(D).")]
     if recommend:
         res = []
         for i in recommend:
@@ -125,5 +118,4 @@ def run_model(user_answer):
     return questions[len(user_inputs[0])]
 
 
-print(run_model(["asian", "yes", "no", "yes", "yes", "vietnam", 600]))
-
+# print(run_model(["asian", "yes", "no", "yes", "yes", "vietnam", 600]))

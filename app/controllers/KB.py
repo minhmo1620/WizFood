@@ -33,40 +33,12 @@ class ModelConfig:
         use_bread(yes),
         origin(france).
     
-    my_dict(_{
-        nasic_lemak: 644,
-        fried_rice: 800, 
-        pho: 400, 
-        dandan_noodle: 378,
-        kebab: 2000,
-        fried_eggplant: 322, 
-        baguette: 130 
-    }).
-    
     abs(X, Y) :- Y is sign(X) * X.
     calories(X, Y, Z) :- abs(X-Y, Z).
     
-    recommend(X) :- bagof(Y, food(Y), Z), expected_calories(M), min_difference(Z, M, X).
-    
-    diff(Base, L, Z):- my_dict(Dc), R=Dc.L, calories(R, Base, Z).
-    
-    min_difference([L|Ls], Base, X) :-
-        diff(Base, L, Z),
-        min_difference(Ls, Z, L, Base, X).
-    
-    min_difference([], Min, X, Base, X).
-    min_difference([L|Ls], Min, X0, Base, X) :-
-        diff(Base, L, Z),
-        Z >= Min,
-        min_difference(Ls, Min, X0, Base, X).
-    
-    min_difference([L|Ls], Min, X0, Base, X) :-
-        diff(Base, L, Z),
-        Z < Min,
-        min_difference(Ls, Min, L, Base, X).
-        
+    recommend(X) :- bagof(Y, food(Y), Z), expected_calories(M).
+
     % Askables
-    expected_calories(X) :- numberask(expected_calories, X).
     preference(P):- menuask(preference, P, [asian, western, eastern]).
     origin(P):- menuask(origin, P, [vietnam, france, china]).
     spicy(X) :- ask(spicy, X).
@@ -147,6 +119,7 @@ class ModelConfig:
         read_py_menuask(Attr, Ans, List),
         menuask(Attr, Val, List).
     '''
+
     question = {
         'preference': 'What is your preference food?',
         'expected_calories': 'How many calories do you want to eat today?',

@@ -23,6 +23,8 @@ conversations_blueprint = Blueprint("conversations", __name__)
 
 secret_key = current_app.config["SECRET_KEY"]
 
+prologLock = Lock()
+
 
 @conversations_blueprint.route("/conversations", methods=["POST"])
 @validate_input(schema=ConversationSchema)
@@ -30,7 +32,8 @@ def create_new_conversation(data):
     # new_conversation = ConversationModel(username=data['username'])
     # db.session.add(new_conversation)
     # db.session.commit()
-    run_model(["asian", "yes", "no", "yes", "yes", "vietnam", 600])
+    with prologLock:
+        run_model(["asian", "yes", "no", "yes", "yes", "vietnam", 600])
 
     return jsonify({"message": "1"}), 201
 
