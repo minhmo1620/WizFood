@@ -6,3 +6,4 @@ class Config:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     DEBUG = True
     JSON_SORT_KEYS = False
+    THREADED = False
