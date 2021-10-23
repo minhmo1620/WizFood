@@ -115,4 +115,4 @@ def run_model(user_answer):
     return questions[len(user_inputs[0])]
 
 
-# run_model(["asian", "yes", "no", "yes", "yes", "vietnam", 600])
+print(run_model(["asian", "yes", "no", "yes", "yes", "vietnam", 600]))
