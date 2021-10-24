@@ -3,20 +3,17 @@ from pyswip.prolog import Prolog
 from pyswip.easy import *
 
 from app.controllers.model_helpers import *
-# from app.controllers.KB import ModelConfig
-# from model_helpers import *
-# from KB import ModelConfig
+from app.controllers.KB import ModelConfig
 
 
 def run_model(user_answer):
     asked = {}
-    # user_inputs  = [["asian", "yes", "no", "yes", "yes", "vietnam", 600], 0]
     user_inputs = [user_answer, 0]
     questions = []
 
     # Define foreign functions for getting user input and writing to the screen
     def write_py(X):
-        # sys.stdout.flush()
+        sys.stdout.flush()
         return True
 
     def read_py_ask(A, V, Y):
@@ -97,12 +94,12 @@ def run_model(user_answer):
     registerForeign(write_py)
 
     # Create a temporary file with the KB in it
-    # (FD, name) = tempfile.mkstemp(suffix='.pl', text=True)
-    # with os.fdopen(FD, "w") as text_file:
-    #     text_file.write(ModelConfig.KB)
-    name = 'app/controllers/KB.pl'
+    (FD, name) = tempfile.mkstemp(suffix='.pl', text=True)
+    with os.fdopen(FD, "w") as text_file:
+        text_file.write(ModelConfig.KB)
+
     prolog.consult(name)  # open the KB for consulting
-    # os.unlink(name)  # Remove the temporary file
+    os.unlink(name)  # Remove the temporary file
 
     call(retractall(known))
     recommend = [s for s in prolog.query("recommend(D).")]
@@ -114,8 +111,12 @@ def run_model(user_answer):
         questions.append('Our recommendation is:' + ''.join(str(e) for e in res))
     else:
         questions.append('unknown.')
-
     return questions[len(user_inputs[0])]
 
 
-# print(run_model(["asian", "yes", "no", "yes", "yes", "vietnam", 600]))
+if __name__ == "__main__":
+    try:
+        user_answers = list(sys.argv[1].split(','))
+    except IndexError:
+        user_answers = []
+    sys.stderr.write(run_model(user_answers))

@@ -10,3 +10,4 @@ pyswip == 0.2.10
 Flask-Threads == 0.1.0
 py-object-pool == 1.1
 swiplserver == 1.0.0
+SQLAlchemy~=1.4.25

@@ -1,7 +1,6 @@
-import threading
-from multiprocessing import Pool
+import subprocess
 
-from flask import Blueprint, jsonify, current_app, render_template, request
+from flask import Blueprint, jsonify, current_app
 from sqlalchemy import func
 from multiprocessing import Lock
 
@@ -10,14 +9,6 @@ from app.models.conversations import ConversationModel
 from app.controllers.models import run_model
 from app.schemas.conversations import ConversationSchema, UpdateConversationSchema
 from app.helpers import validate_input
-
-import tempfile
-from pyswip.prolog import Prolog
-from pyswip.easy import *
-
-from app.controllers.model_helpers import create_ask_question, create_menuask_question, create_numberask_question
-from app.controllers.KB import ModelConfig
-# from app.controllers.test import model_pool
 
 conversations_blueprint = Blueprint("conversations", __name__)
 
@@ -32,10 +23,9 @@ def create_new_conversation(data):
     # new_conversation = ConversationModel(username=data['username'])
     # db.session.add(new_conversation)
     # db.session.commit()
-    with prologLock:
-        run_model(["asian", "yes", "no", "yes", "yes", "vietnam", 600])
-
-    return jsonify({"message": "1"}), 201
+    # print("Hi")
+    response = execute_models([])
+    return jsonify({"message": response}), 201
 
 
 @conversations_blueprint.route("/conversations", methods=["PUT"])
@@ -56,6 +46,17 @@ def update_answer(data):
     return jsonify({"message": response})
 
 
+def execute_models(user_answers):
+    answers = ','.join(user_answers)
+    create_command = "python app/controllers/models.py " + answers + " 2>'./output.txt'"
+    subprocess.call(create_command, shell=True)
+    filename = './output.txt'
 
-# run_model(["asian", "yes", "no", "yes", "yes", "vietnam", 600])
-
+    response = ""
+    with open(filename) as file:
+        while line := file.readline().rstrip():
+            if line[:7] == "Warning":
+                continue
+            response += line
+            response += '\n'
+    return response
