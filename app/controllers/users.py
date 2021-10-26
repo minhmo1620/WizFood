@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, current_app, render_template, request
+from flask import Blueprint, jsonify, current_app
 
 from app import db
 from app.models.users import UserModel
@@ -8,11 +8,6 @@ from app.helpers import hash_password, validate_input, create_salt, encode
 users_blueprint = Blueprint("users", __name__)
 
 secret_key = current_app.config["SECRET_KEY"]
-
-
-@users_blueprint.route("/login", methods=["GET"])
-def render():
-    return render_template('login.html')
 
 
 @users_blueprint.route("/users", methods=["POST"])
