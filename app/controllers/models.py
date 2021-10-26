@@ -25,6 +25,9 @@ def run_model(user_answer):
                 # Ask user
                 try:
                     user_input = read_input()
+                    if user_input not in ['yes', 'no']:
+                        print('Error: Please choose either yes or no')
+                        return False
                 except IndexError:
                     return False
                 # Store the result in asked
@@ -48,6 +51,7 @@ def run_model(user_answer):
                 try:
                     asked[A] = int(user_input)
                 except:
+                    print('Error: Please provide a number')
                     return False
 
             V.unify(asked[A])
@@ -62,8 +66,13 @@ def run_model(user_answer):
                 questions.append(create_menuask_question(A, MenuList))
                 try:
                     user_input = read_input()
+                    if user_input not in (map(str, MenuList)):
+                        print(MenuList)
+                        print('Error: Please choose your answer in the menu provided')
+                        return False
                 except IndexError:
                     return False
+
                 asked[A] = user_input
 
             X.unify(asked[A])
@@ -119,4 +128,4 @@ if __name__ == "__main__":
         user_answers = list(sys.argv[1].split(','))
     except IndexError:
         user_answers = []
-    sys.stderr.write(run_model(user_answers))
+    print(run_model(user_answers))

@@ -1,3 +1,4 @@
+import json
 import subprocess
 
 from flask import Blueprint, jsonify, current_app
@@ -20,10 +21,9 @@ prologLock = Lock()
 @conversations_blueprint.route("/conversations", methods=["POST"])
 @validate_input(schema=ConversationSchema)
 def create_new_conversation(data):
-    # new_conversation = ConversationModel(username=data['username'])
-    # db.session.add(new_conversation)
-    # db.session.commit()
-    # print("Hi")
+    new_conversation = ConversationModel(username=data['username'])
+    db.session.add(new_conversation)
+    db.session.commit()
     response = execute_models([])
     return jsonify({"message": response}), 201
 
@@ -34,29 +34,25 @@ def update_answer(data):
     username = data['username']
     answer = data['answer']
 
-    conversation_id = db.session.query(func.max(ConversationModel.id)).filter(ConversationModel.username == username).all()
-    conversation = db.session.query(ConversationModel).filter(ConversationModel.id == conversation_id).all()
+    conversation_id = db.session.query(func.max(ConversationModel.id)).filter(ConversationModel.username == username).first()
+    conversation = db.session.query(ConversationModel).filter(ConversationModel.id == conversation_id[0]).first()
 
-    answers = conversation.answers
+    answers = json.loads(conversation.answers)
 
     answers.append(answer)
 
-    response = run_model(answers)
+    response = execute_models(answers)
 
-    return jsonify({"message": response})
+    if response[:5] == 'Error':
+        return jsonify({"message": response.split('\n')[0]}), 400
+
+    conversation.answers = json.dumps(answers)
+    db.session.commit()
+    return jsonify({"message": response}), 200
 
 
 def execute_models(user_answers):
     answers = ','.join(user_answers)
-    create_command = "python app/controllers/models.py " + answers + " 2>'./output.txt'"
-    subprocess.call(create_command, shell=True)
-    filename = './output.txt'
-
-    response = ""
-    with open(filename) as file:
-        while line := file.readline().rstrip():
-            if line[:7] == "Warning":
-                continue
-            response += line
-            response += '\n'
-    return response
+    create_command = "python app/controllers/models.py " + answers
+    response = subprocess.run(create_command, shell=True, capture_output=True)
+    return response.stdout.decode('UTF-8')

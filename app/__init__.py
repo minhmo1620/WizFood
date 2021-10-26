@@ -3,7 +3,6 @@ from flask import Flask, jsonify
 from werkzeug.exceptions import HTTPException
 
 from .db import db
-from .models.users import UserModel
 
 ENV_TO_CONFIG = {"test": "app.configs.test.TestingConfig",
                  "dev": "app.configs.dev.DevelopmentConfig",
@@ -40,6 +39,4 @@ def create_app(env):
 
 env = os.environ.get("ENV", "dev")
 app = create_app(env)
-# kwargs = {'host': '127.0.0.1', 'port': 5050, 'threaded': True, 'use_reloader': False, 'debug': False}
-# flaskThread = Thread(target=app.app_context().push(), daemon=True, kwargs=kwargs).start()
 app.app_context().push()
