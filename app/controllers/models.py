@@ -67,7 +67,6 @@ def run_model(user_answer):
                 try:
                     user_input = read_input()
                     if user_input not in (map(str, MenuList)):
-                        print(MenuList)
                         print('Error: Please choose your answer in the menu provided')
                         return False
                 except IndexError:
