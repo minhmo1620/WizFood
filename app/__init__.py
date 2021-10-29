@@ -1,5 +1,6 @@
 import os
 from flask import Flask, jsonify
+from flask_cors import CORS
 from werkzeug.exceptions import HTTPException
 
 from .db import db
@@ -13,6 +14,7 @@ def create_app(env):
     project_root = os.path.dirname(__file__)
     template_path = os.path.join(project_root, 'templates')
     app = Flask(__name__,  template_folder=template_path)
+    CORS(app)
     if env not in ENV_TO_CONFIG:
         raise ValueError("Please choose the correct environment: test/dev/local")
     app.config.from_object(ENV_TO_CONFIG[env])
