@@ -53,6 +53,7 @@ Start the server by running:
     $ export FLASK_ENV=development
     $ export ENV=local
     $ export FLASK_APP=app
+    $ export PYTHONPATH=.
     $ python3 -m flask run
 
 ## Unit Tests
