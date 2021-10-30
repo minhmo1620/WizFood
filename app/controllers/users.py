@@ -38,7 +38,7 @@ def create_user(data):
     db.session.add(new_user)
     db.session.commit()
 
-    token = encode(new_user).decode('utf-8')
+    token = encode(new_user)
     return jsonify({"access_token": token}), 201
 
 
@@ -60,5 +60,5 @@ def auth(data):
     if not user or hash_password(password + user.salt) != user.password:
         return jsonify({"message": "Invalid username or password"}), 401
 
-    token = encode(user).decode('utf-8')
+    token = encode(user)
     return jsonify({"access_token": token}), 200
