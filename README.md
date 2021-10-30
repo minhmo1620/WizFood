@@ -8,9 +8,11 @@ Virtual environment is a key component in ensuring that the application is confi
 ##### Requirements
 * Python 3
 * Pip 3
+* SWI-Prolog
 
 ```bash
 $ brew install python3
+$ brew install swi-prolog
 ```
 
 Pip3 is installed with Python3
