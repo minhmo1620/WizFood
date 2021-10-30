@@ -3,7 +3,7 @@ Werkzeug ==2.0.2
 flask_sqlalchemy == 2.5.1
 flask-marshmallow == 0.14.0
 PyMySQL == 1.0.2
-PyJWT ==2.3.0
+PyJWT == 1.4.0
 marshmallow ==3.14.0
 pytest == 6.2.5
 pyswip == 0.2.10
