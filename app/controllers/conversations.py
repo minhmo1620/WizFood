@@ -30,6 +30,14 @@ def create_new_conversation(data):
 @conversations_blueprint.route("/conversations", methods=["PUT"])
 @validate_input(schema=UpdateConversationSchema)
 def update_answer(data):
+    """
+    Update the conversation in WizAId
+    :param data: a dictionary with
+        - 'username' : username of user
+        - 'answer': the answer of user for current question
+    :return:
+        - (str) the response of the chatbot regarding to user's answer provided
+    """
     username = data['username']
     answer = data['answer']
 
