@@ -1,8 +1,15 @@
-flask == 2.0.1
-Werkzeug == 2.0.1
+flask ==2.0.2
+Werkzeug ==2.0.2
 flask_sqlalchemy == 2.5.1
 flask-marshmallow == 0.14.0
 PyMySQL == 1.0.2
-PyJWT == 2.1.0
-marshmallow ==3.13.0
+PyJWT == 2.3.0
+marshmallow ==3.14.0
 pytest == 6.2.5
+pyswip == 0.2.10
+Flask-Threads == 0.1.0
+py-object-pool == 1.1
+swiplserver == 1.0.0
+SQLAlchemy~=1.4.25
+flask-cors == 3.0.10
+python-dotenv == 0.19.1
