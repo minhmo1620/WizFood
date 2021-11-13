@@ -17,6 +17,14 @@ secret_key = current_app.config["SECRET_KEY"]
 @conversations_blueprint.route("/conversations", methods=["POST"])
 @validate_input(schema=ConversationSchema)
 def create_new_conversation(data):
+    """
+    Create a new conversation between user and WizAid
+    :param data: a dictionary with
+        - 'username' : username of user
+    :return: {
+        "message": <the first question sending to user>
+    }
+    """
     # Create new conversation based on username
     new_conversation = ConversationModel(username=data['username'])
     db.session.add(new_conversation)
