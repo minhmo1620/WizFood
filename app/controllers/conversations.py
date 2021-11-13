@@ -34,7 +34,8 @@ def update_answer(data):
     answer = data['answer']
 
     # Query the latest conversation of current username
-    conversation_id = db.session.query(func.max(ConversationModel.id)).filter(ConversationModel.username == username).first()
+    conversation_id = db.session.query(func.max(ConversationModel.id)).filter(
+        ConversationModel.username == username).first()
     conversation = db.session.query(ConversationModel).filter(ConversationModel.id == conversation_id[0]).first()
 
     # Loads the existed answers list
