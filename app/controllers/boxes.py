@@ -34,18 +34,20 @@ def create_new_box(user_id, data):
     db.session.add(new_box)
     db.session.commit()
 
-    return new_box.id
+    return jsonify(BoxSchema().dump(new_box)), 200
 
 
 @boxes_blueprint.route("/boxes/<int:box_id>/vote", methods=["POST"])
 @token_required
 @validate_input(schema=VoteSchema)
 def vote_options(user_id, box_id, data):
+    data = data['votes']
+
     # Query all options of one box
     all_options = db.session.query(OptionModel).filter(OptionModel.box_id == box_id).all()
 
     for option in all_options:
-        option_id = option.id
+        option_id = str(option.id)
         if option_id not in data:
             return jsonify({"message": "Please vote for all options"}), 400
         # Update the vote value
