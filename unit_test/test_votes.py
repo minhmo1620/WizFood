@@ -115,8 +115,8 @@ def test_vote_option_success(client):
     }
 
     response = client.post(f'/boxes/{box_id}/vote', json=data, headers=headers)
-    assert response.status_code == 200
-    assert {"message": "Vote successfully"} == json.loads(response.data)
+    assert response.status_code == 201
+    assert {"message": "Voted successfully"} == json.loads(response.data)
 
     all_votes_after = get_current_votes(box_id)
     expected_all_votes_after = {
@@ -147,8 +147,8 @@ def test_vote_option_success(client):
     }
 
     response = client.post(f'/boxes/{box_id}/vote', json=data, headers=headers)
-    assert response.status_code == 200
-    assert {"message": "Vote successfully"} == json.loads(response.data)
+    assert response.status_code == 201
+    assert {"message": "Voted successfully"} == json.loads(response.data)
 
     all_votes_after = get_current_votes(box_id)
     expected_all_votes_after = {

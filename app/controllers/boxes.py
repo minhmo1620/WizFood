@@ -60,4 +60,4 @@ def vote_options(user_id, box_id, data):
     new_vote = VoteModel(user_id, json.dumps(data))
     db.session.add(new_vote)
     db.session.commit()
-    return jsonify({"message": "Vote successfully"}), 200
+    return jsonify({"message": "Voted successfully"}), 201
