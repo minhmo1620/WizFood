@@ -18,7 +18,7 @@ boxes_blueprint = Blueprint("boxes", __name__)
 @boxes_blueprint.route("/boxes", methods=["GET"])
 @token_required
 def get_all_boxes(user_id):
-    list_boxes = db.session.query(BoxModel).filter(BoxModel.user_id == user_id).all()
+    list_boxes = db.session.query(BoxModel).filter(BoxModel.owner_id == user_id).all()
 
     return jsonify(BoxSchema(many=True).dump(list_boxes)), 200
 
