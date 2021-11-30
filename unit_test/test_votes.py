@@ -10,6 +10,18 @@ def test_vote_options_fail(client):
     headers = create_headers(token)
     box_id = create_dummy_box(1, "Minerva Feast", "06-02-2021")
 
+    # invalid data
+    data = {
+        "votes": {
+            1: 0,
+            2: 1
+        }
+    }
+
+    response = client.post(f'/boxes/{box_id}/vote', json=data, headers=headers)
+    assert response.status_code == 400
+    assert {"message": "Please vote all available options"} == json.loads(response.data)
+
     create_dummy_option(box_id, 1, "Option 1", "Description 1")
     create_dummy_option(box_id, 2, "Option 2", "Description 2")
     create_dummy_option(box_id, 3, "Option 3", "Description 3")
@@ -25,7 +37,7 @@ def test_vote_options_fail(client):
 
     response = client.post(f'/boxes/{box_id}/vote', json=data, headers=headers)
     assert response.status_code == 400
-    assert {"message": "Please vote for all options"} == json.loads(response.data)
+    assert {"message": "Please vote all available options"} == json.loads(response.data)
 
     # invalid data
     data = {
@@ -37,7 +49,7 @@ def test_vote_options_fail(client):
 
     response = client.post(f'/boxes/{box_id}/vote', json=data, headers=headers)
     assert response.status_code == 400
-    assert {"message": "Please vote for all options"} == json.loads(response.data)
+    assert {"message": "Please vote all available options"} == json.loads(response.data)
 
     # invalid data
     data = {

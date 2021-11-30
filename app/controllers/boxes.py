@@ -52,10 +52,13 @@ def vote_options(user_id, box_id, data):
     # Query all options of one box
     all_options = db.session.query(OptionModel).filter(OptionModel.box_id == box_id).all()
 
+    # Validate the option in data
+    option_id_list = [str(option.id) for option in all_options]
+    if option_id_list != list(data.keys()):
+        return jsonify({"message": "Please vote all available options"}), 400
+
     for option in all_options:
         option_id = str(option.id)
-        if option_id not in data:
-            return jsonify({"message": "Please vote for all options"}), 400
         # Update the vote value
         vote_value = data[option_id]
         option_vote_value = json.loads(option.vote)
