@@ -10,6 +10,8 @@ from app.models.options import OptionModel
 from app.models.votes import VoteModel
 from app.helpers import validate_input, token_required
 
+from controllers.helpers import validate_box_id
+
 boxes_blueprint = Blueprint("boxes", __name__)
 
 
@@ -42,6 +44,10 @@ def create_new_box(user_id, data):
 @validate_input(schema=VoteSchema)
 def vote_options(user_id, box_id, data):
     data = data['votes']
+
+    # Validate the box_id
+    if not validate_box_id(box_id):
+        return jsonify({'message': 'Cannot find the wizbox'}), 404
 
     # Query all options of one box
     all_options = db.session.query(OptionModel).filter(OptionModel.box_id == box_id).all()
