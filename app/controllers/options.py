@@ -35,4 +35,4 @@ def create_new_option(box_id, user_id, data):
     db.session.add(new_option)
     db.session.commit()
 
-    return jsonify(OptionSchema().dump(new_option)), 200
+    return jsonify(OptionSchema().dump(new_option)), 201

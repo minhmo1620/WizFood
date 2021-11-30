@@ -30,7 +30,7 @@ def test_create_new_option(client):
     # valid input
     data1 = {"name": "Ngon ngon", "description": "Vietnamese food"}
     response = client.post(f"/boxes/{box_id}/options", json=data1, headers=headers)
-    assert response.status_code == 200
+    assert response.status_code == 201
     expected_response = {
         "name": "Ngon ngon",
         "description": "Vietnamese food",

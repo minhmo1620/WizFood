@@ -34,7 +34,7 @@ def create_new_box(user_id, data):
     db.session.add(new_box)
     db.session.commit()
 
-    return jsonify(BoxSchema().dump(new_box)), 200
+    return jsonify(BoxSchema().dump(new_box)), 201
 
 
 @boxes_blueprint.route("/boxes/<int:box_id>/vote", methods=["POST"])

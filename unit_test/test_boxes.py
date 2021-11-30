@@ -26,7 +26,7 @@ def test_create_new_box(client):
     # valid input
     data = {"name": "Minerva Feast", "description": "06-02-2020"}
     response = client.post("/boxes", json=data, headers=headers)
-    assert response.status_code == 200
+    assert response.status_code == 201
     expected_response = {
         "name": "Minerva Feast",
         "description": "06-02-2020",
