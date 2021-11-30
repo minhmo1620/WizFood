@@ -6,6 +6,7 @@ class VoteModel(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+    # TODO: store option_id and box_id for future reference
     data = db.Column(db.String, nullable=False)
 
     def __init__(self, user_id, data):
