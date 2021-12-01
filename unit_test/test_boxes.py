@@ -11,6 +11,17 @@ def test_create_new_box(client):
     token = create_dummy_user(username="mia", password="abc")
     headers = create_headers(token)
 
+    # no data
+    response = client.post("/boxes", headers=headers)
+    assert response.status_code == 400
+    assert {'message': '400 Bad Request: Failed to decode JSON object: Expecting value: line 1 column 1 (char 0)'} \
+           == json.loads(response.data)
+
+    # empty data
+    response = client.post("/boxes", json={}, headers=headers)
+    assert response.status_code == 400
+    assert {"message": "Data is required."} == json.loads(response.data)
+
     # invalid input
     data = {"name": 1, "description": "Vietnamese food"}
     response = client.post("/boxes", json=data, headers=headers)
@@ -64,8 +75,3 @@ def test_get_all_boxes(client):
         }
     ]
     assert expected_response == json.loads(response.data)
-
-
-
-
-

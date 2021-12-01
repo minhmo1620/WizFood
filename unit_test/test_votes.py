@@ -109,6 +109,17 @@ def test_vote_options_fail(client):
     assert response.status_code == 404
     assert {'message': 'Cannot find the wizbox'} == json.loads(response.data)
 
+    # no data
+    response = client.post(f'/boxes/{box_id}/vote', headers=headers)
+    assert response.status_code == 400
+    assert {'message': '400 Bad Request: Failed to decode JSON object: Expecting value: line 1 column 1 (char 0)'} \
+           == json.loads(response.data)
+
+    # empty data
+    response = client.post(f'/boxes/{box_id}/vote', json={}, headers=headers)
+    assert response.status_code == 400
+    assert {"message": "Data is required."} == json.loads(response.data)
+
 
 def test_vote_option_success(client):
     # create header

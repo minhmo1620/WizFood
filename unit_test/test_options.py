@@ -9,6 +9,17 @@ def test_create_new_option(client):
     headers = create_headers(token)
     box_id = create_dummy_box(1, "Minerva Feast", "06-02-2021")
 
+    # no data
+    response = client.post(f"/boxes/{box_id}/options", headers=headers)
+    assert response.status_code == 400
+    assert {'message': '400 Bad Request: Failed to decode JSON object: Expecting value: line 1 column 1 (char 0)'} \
+           == json.loads(response.data)
+
+    # empty data
+    response = client.post(f"/boxes/{box_id}/options", json={}, headers=headers)
+    assert response.status_code == 400
+    assert {"message": "Data is required."} == json.loads(response.data)
+
     # invalid input
     data1 = {"name": 1, "description": "Vietnamese food"}
     response = client.post(f"/boxes/{box_id}/options", json=data1, headers=headers)
