@@ -49,7 +49,6 @@ def validate_input(schema):
         def wrapper(*args, **kwargs):
             # take the input
             data = request.get_json()
-            print(data)
             if (data is None) or (data == {}):
                 return jsonify({"message": "Data is required."}), 400
 
