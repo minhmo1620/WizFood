@@ -7,11 +7,17 @@ from app.models.boxes import BoxModel
 from app.helpers import validate_input, token_required
 from controllers.helpers import validate_box_id
 
+"""
+In each box, user can add their food recommendation as an option for everyone to vote later
+"""
 options_blueprint = Blueprint("options", __name__)
 
 
 @options_blueprint.route("/boxes/<int:box_id>/options", methods=["GET"])
 def get_options(box_id):
+    """
+    Get all options of one box based on box_id
+    """
     if not validate_box_id(box_id):
         return jsonify({'message': 'Cannot find the wizbox'}), 404
 
@@ -24,6 +30,9 @@ def get_options(box_id):
 @token_required
 @validate_input(schema=OptionSchema)
 def create_new_option(box_id, user_id, data):
+    """
+    Create new option in one specific box
+    """
     name = data['name']
     description = data['description']
 
