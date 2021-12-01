@@ -65,3 +65,7 @@ To run the unit tests use the following commands:
     $ source venv_unit/bin/activate
     $ pip install -r requirements.txt
     $ pytest unit_test
+
+To check the coverage of the test
+
+    $ pytest --cov=app unit_test/

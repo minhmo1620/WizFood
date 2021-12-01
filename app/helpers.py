@@ -30,7 +30,7 @@ def token_required(f):
         if token[0] != "Bearer":
             return jsonify({"message": "Invalid token"}), 400
         try:
-            data = jwt.decode(token[1], current_app.config["SECRET_KEY"])
+            data = jwt.decode(token[1], current_app.config["SECRET_KEY"], algorithms=["HS256"])
             username = data["user"]
             user = db.session.query(UserModel).filter_by(username=username).first()
             if user is None:
@@ -49,6 +49,8 @@ def validate_input(schema):
         def wrapper(*args, **kwargs):
             # take the input
             data = request.get_json()
+            if (data is None) or (data == {}):
+                return jsonify({"message": "Data is required."}), 400
 
             # check the validity of the input
             try:

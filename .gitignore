@@ -103,12 +103,14 @@ celerybeat.pid
 
 # Environments
 .env
+.coverage
 .venv
 env/
 venv/
 ENV/
 env.bak/
 venv.bak/
+venv_unit/
 
 # Spyder project settings
 .spyderproject
@@ -135,4 +137,5 @@ dmypy.json
 */.DS_Store
 
 # db
-*/*.db
+configs/database.db
+configs/test.db

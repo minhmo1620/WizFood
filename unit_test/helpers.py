@@ -1,7 +1,11 @@
+import json
+
 import jwt
 from flask import current_app
 
 from app.models.users import UserModel
+from app.models.boxes import BoxModel
+from app.models.options import OptionModel
 from app.helpers import hash_password, create_salt
 from app.db import db
 
@@ -46,3 +50,33 @@ def create_headers(token):
     }
     return headers
 
+
+def create_dummy_box(user_id, name, description):
+    """
+    This function is to create a new wizbox in the database
+    to test other functions for options/vote (get, put, post, delete)
+    """
+    new_box = BoxModel(user_id=user_id, name=name, description=description)
+
+    db.session.add(new_box)
+    db.session.commit()
+
+    return new_box.id
+
+
+def create_dummy_option(box_id, user_id, name, description):
+    """
+    This function is to create dummy option for specific wizbox
+    """
+    new_option = OptionModel(name, description, box_id, user_id)
+    db.session.add(new_option)
+    db.session.commit()
+
+
+def get_current_votes(box_id):
+    all_options = db.session.query(OptionModel).filter(OptionModel.box_id == box_id).all()
+    votes = dict()
+
+    for option in all_options:
+        votes[option.id] = json.loads(option.vote)
+    return votes

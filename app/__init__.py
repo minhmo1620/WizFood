@@ -30,9 +30,13 @@ def create_app(env):
     with app.app_context():
         from .controllers.users import users_blueprint
         from .controllers.conversations import conversations_blueprint
+        from .controllers.boxes import boxes_blueprint
+        from .controllers.options import options_blueprint
 
         app.register_blueprint(users_blueprint, url_prefix="/")
         app.register_blueprint(conversations_blueprint, url_prefix="/")
+        app.register_blueprint(boxes_blueprint, url_prefix="/")
+        app.register_blueprint(options_blueprint, url_prefix="/")
 
         db.create_all()
 

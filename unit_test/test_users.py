@@ -8,6 +8,16 @@ def test_create_user(client):
     Test: Create a new user, "/users"
     """
 
+    # no data
+    response = client.post("/users")
+    assert response.status_code == 400
+    assert {"message": "Data is required."} == json.loads(response.data)
+
+    # empty data
+    client.post("/users", json={})
+    assert response.status_code == 400
+    assert {"message": "Data is required."} == json.loads(response.data)
+
     # invalid input
     data = {"username": 230, "password": "abc"}
     response = client.post("/users", json=data)
