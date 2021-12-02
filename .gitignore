@@ -137,5 +137,5 @@ dmypy.json
 */.DS_Store
 
 # db
-configs/database.db
-configs/test.db
+app/configs/database.db
+app/configs/test.db
