@@ -57,6 +57,7 @@ def test_auth(client):
     response = client.post("/auth", json=data)
     assert response.status_code == 200
     assert "access_token" in json.loads(response.data)
+    assert json.loads(response.data)["username"] == data["username"]
 
     # wrong password
     data = {"username": "mia", "password": "abcd"}
