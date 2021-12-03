@@ -31,6 +31,21 @@ def get_all_boxes(user_id):
     return jsonify(BoxSchema(many=True).dump(list_boxes)), 200
 
 
+@boxes_blueprint.route("/boxes/<int:box_id>", methods=["GET"])
+@token_required
+def get_box(user_id, box_id):
+    """
+    :param box_id: ID of the box
+    :param user_id: Who is querying?
+    :return: One box matched with box_id
+    """
+    box = db.session.query(BoxModel).filter(BoxModel.id == box_id).first()
+    if box is None:
+        return jsonify({'message': 'Cannot find the wizbox'}), 404
+
+    return jsonify(BoxSchema().dump(box)), 200
+
+
 @boxes_blueprint.route("/boxes", methods=["POST"])
 @token_required
 @validate_input(schema=BoxSchema)
