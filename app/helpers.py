@@ -26,6 +26,9 @@ def token_required(f):
 
     @wraps(f)
     def wrapper(*arg, **kwargs):
+        if not request.headers.get("Authorization"):
+            return jsonify({"message": "Authorization required"}), 400
+
         token = request.headers["Authorization"].split()
         if token[0] != "Bearer":
             return jsonify({"message": "Invalid token"}), 400
@@ -35,7 +38,6 @@ def token_required(f):
             user = db.session.query(UserModel).filter_by(username=username).first()
             if user is None:
                 return jsonify({"message": "Unauthenticated"}), 401
-
         except:
             return jsonify({"message": "Invalid token"}), 400
         return f(*arg, **kwargs, user_id=user.id)
