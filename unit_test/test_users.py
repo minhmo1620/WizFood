@@ -29,7 +29,7 @@ def test_create_user(client):
     data = {"username": "mia", "password": "abc"}
     response = client.post("/users", json=data)
     assert response.status_code == 201
-    assert "access_token" in json.loads(response.data)
+    assert json.loads(response.data) == {"message": "Signup successfully"}
 
     # existing user
     data = {"username": "mia", "password": "abcd"}
