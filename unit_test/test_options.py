@@ -45,7 +45,8 @@ def test_create_new_option(client):
     expected_response = {
         "name": "Ngon ngon",
         "description": "Vietnamese food",
-        "id": 1
+        "id": 1,
+        "vote": [0, 0, 0]
     }
     assert expected_response == json.loads(response.data)
 
@@ -74,22 +75,26 @@ def test_get_options(client):
         {
             'id': 1,
             'name': 'Option 1',
-            'description': 'Description 1'
+            'description': 'Description 1',
+            'vote': [0, 0, 0]
         },
         {
             'id': 2,
             'name': 'Option 2',
-            'description': 'Description 2'
+            'description': 'Description 2',
+            'vote': [0, 0, 0]
         },
         {
             'id': 3,
             'name': 'Option 3',
-            'description': 'Description 3'
+            'description': 'Description 3',
+            'vote': [0, 0, 0]
         },
         {
             'id': 4,
             'name': 'Option 4',
-            'description': 'Description 4'
+            'description': 'Description 4',
+            'vote': [0, 0, 0]
         }
     ]
     assert expected_response == json.loads(response.data)
