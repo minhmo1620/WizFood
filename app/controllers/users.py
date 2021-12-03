@@ -38,8 +38,7 @@ def create_user(data):
     db.session.add(new_user)
     db.session.commit()
 
-    token = encode(new_user)
-    return jsonify({"access_token": token}), 201
+    return jsonify({"message": "Signup successfully"}), 201
 
 
 @users_blueprint.route("/auth", methods=["POST"])
@@ -61,4 +60,4 @@ def auth(data):
         return jsonify({"message": "Invalid username or password"}), 401
 
     token = encode(user)
-    return jsonify({"access_token": token}), 200
+    return jsonify({"access_token": token, "username": username}), 200
