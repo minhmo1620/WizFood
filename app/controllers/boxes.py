@@ -80,7 +80,7 @@ def vote_options(user_id, box_id, data):
     :param data:
         {
             "votes": {
-                option_id: 0 - sad, 1 - neutral, 2 - happy
+                option_id: 0 - happy, 1 - neutral, 2 - sad
             }
         }
     """
