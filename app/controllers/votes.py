@@ -73,6 +73,8 @@ def vote_options(user_id, box_id, data):
             option_vote_value[new_vote_value] += 1
             option.vote = json.dumps(option_vote_value)
 
+        # Update vote data
+        vote.data = json.dumps(data)
         db.session.commit()
         return jsonify({"message": "Update vote successfully"}), 200
 
