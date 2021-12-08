@@ -3,9 +3,8 @@ from flask import Blueprint, jsonify
 from app import db
 from app.schemas.options import OptionSchema
 from app.models.options import OptionModel
-from app.models.boxes import BoxModel
 from app.helpers import validate_input, token_required
-from controllers.helpers import validate_box_id
+from app.controllers.helpers import validate_box_id
 
 """
 In each box, user can add their food recommendation as an option for everyone to vote later
