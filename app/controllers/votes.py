@@ -54,16 +54,39 @@ def vote_options(user_id, box_id, data):
     if option_id_list != list(data.keys()):
         return jsonify({"message": "Please vote all available options"}), 400
 
-    for option in all_options:
-        option_id = str(option.id)
-        # Update the vote value
-        vote_value = data[option_id]
-        option_vote_value = json.loads(option.vote)
-        option_vote_value[vote_value] += 1
-        option.vote = json.dumps(option_vote_value)
-    db.session.commit()
+    # Get value of old vote
+    vote = db.session.query(VoteModel).filter(VoteModel.box_id == box_id).filter(VoteModel.user_id == user_id).first()
 
-    new_vote = VoteModel(user_id, box_id, json.dumps(data))
-    db.session.add(new_vote)
-    db.session.commit()
-    return jsonify({"message": "Voted successfully"}), 201
+    if vote:
+        vote_data = json.loads(vote.data)
+        for option in all_options:
+            option_id = str(option.id)
+
+            # Update the vote value
+            new_vote_value = data[option_id]
+            old_vote_value = vote_data.get(option_id)
+            option_vote_value = json.loads(option.vote)
+
+            if old_vote_value:
+                option_vote_value[old_vote_value] -= 1
+
+            option_vote_value[new_vote_value] += 1
+            option.vote = json.dumps(option_vote_value)
+
+        db.session.commit()
+        return jsonify({"message": "Update vote successfully"}), 200
+
+    else:
+        for option in all_options:
+            option_id = str(option.id)
+            # Update the vote value
+            vote_value = data[option_id]
+            option_vote_value = json.loads(option.vote)
+            option_vote_value[vote_value] += 1
+            option.vote = json.dumps(option_vote_value)
+        db.session.commit()
+
+        new_vote = VoteModel(user_id, box_id, json.dumps(data))
+        db.session.add(new_vote)
+        db.session.commit()
+        return jsonify({"message": "Voted successfully"}), 201
