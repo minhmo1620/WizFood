@@ -67,7 +67,7 @@ def vote_options(user_id, box_id, data):
             old_vote_value = vote_data.get(option_id)
             option_vote_value = json.loads(option.vote)
 
-            if old_vote_value:
+            if old_vote_value is not None:
                 option_vote_value[old_vote_value] -= 1
 
             option_vote_value[new_vote_value] += 1
