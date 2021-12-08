@@ -123,8 +123,14 @@ def test_vote_options_fail(client):
 
 def test_vote_option_success(client):
     # create header
-    token = create_dummy_user(username="mia", password="abc")
-    headers = create_headers(token)
+    # user 1
+    token1 = create_dummy_user(username="mia", password="abc")
+    headers1 = create_headers(token1)
+    # user 2
+    token2 = create_dummy_user(username="minh", password="abc")
+    headers2 = create_headers(token2)
+
+    # Create a new box
     box_id = create_dummy_box(1, "Minerva Feast", "06-02-2021")
 
     create_dummy_option(box_id, 1, "Option 1", "Description 1")
@@ -151,7 +157,7 @@ def test_vote_option_success(client):
         }
     }
 
-    response = client.post(f'/boxes/{box_id}/vote', json=data, headers=headers)
+    response = client.post(f'/boxes/{box_id}/vote', json=data, headers=headers1)
     assert response.status_code == 201
     assert {"message": "Voted successfully"} == json.loads(response.data)
 
@@ -183,15 +189,96 @@ def test_vote_option_success(client):
         }
     }
 
-    response = client.post(f'/boxes/{box_id}/vote', json=data, headers=headers)
+    response = client.post(f'/boxes/{box_id}/vote', json=data, headers=headers1)
+    assert response.status_code == 200
+    assert {"message": "Update vote successfully"} == json.loads(response.data)
+
+    all_votes_after = get_current_votes(box_id)
+    expected_all_votes_after = {
+        1: [0, 1, 0],
+        2: [0, 0, 1],
+        3: [1, 0, 0],
+        4: [0, 1, 0]
+    }
+    assert expected_all_votes_after == all_votes_after
+
+    # Add new options
+    create_dummy_option(box_id, 1, "Option 5", "Description 5")
+    create_dummy_option(box_id, 2, "Option 6", "Description 6")
+
+    # one vote from user 1 after adding new options
+    all_votes_before = get_current_votes(box_id)
+    expected_all_votes_before = {
+        1: [0, 1, 0],
+        2: [0, 0, 1],
+        3: [1, 0, 0],
+        4: [0, 1, 0],
+        5: [0, 0, 0],
+        6: [0, 0, 0]
+    }
+    assert expected_all_votes_before == all_votes_before
+
+    data = {
+        "votes": {
+            1: 1,
+            2: 2,
+            3: 0,
+            4: 1,
+            # Add vote for new options
+            5: 1,
+            6: 0
+        }
+    }
+
+    response = client.post(f'/boxes/{box_id}/vote', json=data, headers=headers1)
+    assert response.status_code == 200
+    assert {"message": "Update vote successfully"} == json.loads(response.data)
+
+    all_votes_after = get_current_votes(box_id)
+    expected_all_votes_after = {
+        1: [0, 1, 0],
+        2: [0, 0, 1],
+        3: [1, 0, 0],
+        4: [0, 1, 0],
+        5: [0, 1, 0],
+        6: [1, 0, 0]
+    }
+    assert expected_all_votes_after == all_votes_after
+
+    # Vote from user 2 after adding new options
+    all_votes_before = get_current_votes(box_id)
+    expected_all_votes_before = {
+        1: [0, 1, 0],
+        2: [0, 0, 1],
+        3: [1, 0, 0],
+        4: [0, 1, 0],
+        5: [0, 1, 0],
+        6: [1, 0, 0]
+    }
+    assert expected_all_votes_before == all_votes_before
+
+    data = {
+        "votes": {
+            1: 1,
+            2: 2,
+            3: 0,
+            4: 1,
+            5: 1,
+            6: 0
+        }
+    }
+
+    response = client.post(f'/boxes/{box_id}/vote', json=data, headers=headers2)
     assert response.status_code == 201
     assert {"message": "Voted successfully"} == json.loads(response.data)
 
     all_votes_after = get_current_votes(box_id)
     expected_all_votes_after = {
-        1: [1, 1, 0],
-        2: [0, 1, 1],
-        3: [1, 1, 0],
-        4: [0, 2, 0]
+        1: [0, 2, 0],
+        2: [0, 0, 2],
+        3: [2, 0, 0],
+        4: [0, 2, 0],
+        5: [0, 2, 0],
+        6: [2, 0, 0]
     }
     assert expected_all_votes_after == all_votes_after
