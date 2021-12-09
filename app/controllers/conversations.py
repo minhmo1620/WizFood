@@ -77,7 +77,7 @@ def execute_models(user_answers):
     # Join the list of answers to a string format a,b,c
     answers = ','.join(user_answers)
     # Create shell command
-    create_command = "python app/controllers/models.py " + answers
+    create_command = "python app/AI_models/models.py " + answers
     # Run model with answers as argument
     response = subprocess.run(create_command, shell=True, capture_output=True)
     return response.stdout.decode('UTF-8')
