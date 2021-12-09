@@ -2,8 +2,8 @@ import tempfile
 from pyswip.prolog import Prolog
 from pyswip.easy import *
 
-from app.controllers.model_helpers import *
-from app.controllers.KB import ModelConfig
+from model_helpers import *
+from KB import ModelConfig
 
 
 def run_model(user_answer):

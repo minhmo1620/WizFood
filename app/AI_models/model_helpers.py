@@ -1,4 +1,4 @@
-from app.controllers.KB import ModelConfig
+from KB import ModelConfig
 
 
 def validate_input(A, user_input):
