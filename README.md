@@ -50,6 +50,16 @@ Install dependencies in virtual environment:
 
 ## Run Application
 
+### Docker
+Build:
+
+    $ docker build -t wizfood:1.0 . 
+
+Run:
+
+    $ docker run --rm -p 5000:5000 wizfood:1.0
+
+### Without Docker
 Start the server by running:
 
     $ export FLASK_ENV=development
