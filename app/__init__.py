@@ -21,10 +21,11 @@ def create_app(env):
     CORS(app)
     if env not in ENV_TO_CONFIG:
         raise ValueError("Please choose the correct environment: test/dev/local/staging/production")
-    app.config.from_object(ENV_TO_CONFIG[env])
+    
     uri = os.getenv("DATABASE_URL")  # or other relevant config var
     if uri and uri.startswith("postgres://"):
         uri = uri.replace("postgres://", "postgresql://", 1)
+    app.config.from_object(ENV_TO_CONFIG[env])
     print(app.config['SQLALCHEMY_DATABASE_URI'])
     db.init_app(app)
 
