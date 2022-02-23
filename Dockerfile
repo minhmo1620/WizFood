@@ -14,9 +14,11 @@ COPY requirements.txt /root/python/wizfood/
 RUN pip3 install -r requirements.txt
 COPY . /root/python/wizfood/
 
+PORT=8080
+EXPOSE $PORT
 RUN export FLASK_ENV=development
 RUN export ENV=local
 RUN export FLASK_APP=app
 RUN export PYTHONPATH=.
 
-CMD ["python", "-m", "flask", "run", "--host", "0.0.0.0", "--port", "5000"]
+CMD ["python", "-m", "flask", "run", "--host", "0.0.0.0", "--port", "$PORT"]
