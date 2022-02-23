@@ -19,4 +19,4 @@ RUN export ENV=local
 RUN export FLASK_APP=app
 RUN export PYTHONPATH=.
 
-CMD ["python", "-m", "flask", "run", "--host", "0.0.0.0"]
+CMD ["python", "-m", "flask", "run", "--host", "0.0.0.0", "--port", "5000"]
