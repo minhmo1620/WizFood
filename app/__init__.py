@@ -1,5 +1,4 @@
 import os
-import re
 from flask import Flask, jsonify
 from flask_cors import CORS
 from werkzeug.exceptions import HTTPException
@@ -21,12 +20,11 @@ def create_app(env):
     CORS(app)
     if env not in ENV_TO_CONFIG:
         raise ValueError("Please choose the correct environment: test/dev/local/staging/production")
-    
     app.config.from_object(ENV_TO_CONFIG[env])
     uri = app.config['SQLALCHEMY_DATABASE_URI']
     if uri and uri.startswith("postgres://"):
         app.config['SQLALCHEMY_DATABASE_URI'] = uri.replace("postgres://", "postgresql://", 1)
-    print(app.config['SQLALCHEMY_DATABASE_URI'])
+
     db.init_app(app)
 
     @app.errorhandler(Exception)
@@ -52,7 +50,6 @@ def create_app(env):
         db.create_all()
 
     return app
-
 
 env = os.environ.get("ENV", "dev")
 app = create_app(env)
