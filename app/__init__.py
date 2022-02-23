@@ -7,7 +7,10 @@ from .db import db
 
 ENV_TO_CONFIG = {"test": "app.configs.test.TestingConfig",
                  "dev": "app.configs.dev.DevelopmentConfig",
-                 "local": "app.configs.local.LocalConfig"}
+                 "local": "app.configs.local.LocalConfig",
+                 "staging": "app.configs.staging.StagingConfig",
+                 "production": "app.configs.production.ProductionConfig"
+                 }
 
 
 def create_app(env):
@@ -16,7 +19,7 @@ def create_app(env):
     app = Flask(__name__,  template_folder=template_path)
     CORS(app)
     if env not in ENV_TO_CONFIG:
-        raise ValueError("Please choose the correct environment: test/dev/local")
+        raise ValueError("Please choose the correct environment: test/dev/local/staging/production")
     app.config.from_object(ENV_TO_CONFIG[env])
     db.init_app(app)
 
