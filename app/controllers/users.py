@@ -26,6 +26,7 @@ def create_user(data):
     """
     username = data["username"]
     password = data["password"]
+    print('Hello')
 
     user = db.session.query(UserModel).filter(UserModel.username == username).first()
     if user:
