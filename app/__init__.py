@@ -24,6 +24,7 @@ def create_app(env):
     uri = os.getenv("DATABASE_URL")  # or other relevant config var
     if uri and uri.startswith("postgres://"):
         uri = uri.replace("postgres://", "postgresql://", 1)
+    print(app.config['SQLALCHEMY_DATABASE_URI'])
     db.init_app(app)
 
     @app.errorhandler(Exception)
