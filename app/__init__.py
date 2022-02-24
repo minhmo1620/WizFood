@@ -21,6 +21,12 @@ def create_app(env):
     if env not in ENV_TO_CONFIG:
         raise ValueError("Please choose the correct environment: test/dev/local/staging/production")
     app.config.from_object(ENV_TO_CONFIG[env])
+
+    # Replace the URL from postgres to postgresql+psycopg2
+    uri = app.config['SQLALCHEMY_DATABASE_URI']
+    if uri and uri.startswith("postgres://"):
+        app.config['SQLALCHEMY_DATABASE_URI'] = uri.replace("postgres://", "postgresql+psycopg2://", 1)
+    
     db.init_app(app)
 
     @app.errorhandler(Exception)
