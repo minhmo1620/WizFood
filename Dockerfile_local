@@ -14,9 +14,9 @@ COPY requirements.txt /root/python/wizfood/
 RUN pip3 install -r requirements.txt
 COPY . /root/python/wizfood/
 
-RUN export FLASK_ENV=staging
-RUN export ENV=staging
+RUN export FLASK_ENV=local
+RUN export ENV=local
 RUN export FLASK_APP=app
 RUN export PYTHONPATH=.
 
-CMD ["gunicorn", "-w", "2", "app:app"]
+CMD ["python", "-m", "flask", "run", "--host", "0.0.0.0"]
