@@ -51,7 +51,7 @@ def vote_options(user_id, box_id, data):
 
     # Validate the option in data
     option_id_list = [str(option.id) for option in all_options]
-    if option_id_list != list(data.keys()):
+    if sorted(option_id_list) != sorted(list(data.keys())):
         return jsonify({"message": "Please vote all available options"}), 400
 
     # Get value of old vote
