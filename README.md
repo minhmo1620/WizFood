@@ -53,7 +53,7 @@ Install dependencies in virtual environment:
 ### Docker
 Build:
 
-    $ docker build -t wizfood:1.0 . 
+    $ docker build -f Dockerfile_local -t wizfood:1.0 . 
 
 Run:
 
@@ -62,7 +62,7 @@ Run:
 ### Without Docker
 Start the server by running:
 
-    $ export FLASK_ENV=development
+    $ export FLASK_ENV=local
     $ export ENV=local
     $ export FLASK_APP=app
     $ export PYTHONPATH=.
