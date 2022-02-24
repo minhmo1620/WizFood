@@ -5,6 +5,10 @@ from werkzeug.exceptions import HTTPException
 
 from .db import db
 
+# Load the environment variable in .env
+from dotenv import load_dotenv
+load_dotenv()
+
 ENV_TO_CONFIG = {"test": "app.configs.test.TestingConfig",
                  "dev": "app.configs.dev.DevelopmentConfig",
                  "local": "app.configs.local.LocalConfig",
