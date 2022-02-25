@@ -190,6 +190,10 @@ def test_vote_option_success(client):
     }
 
     response = client.post(f'/boxes/{box_id}/vote', json=data, headers=headers1)
+    assert response.status_code == 400
+    assert {"message": "Please choose the correct method"} == json.loads(response.data)
+
+    response = client.put(f'/boxes/{box_id}/vote', json=data, headers=headers1)
     assert response.status_code == 200
     assert {"message": "Update vote successfully"} == json.loads(response.data)
 
@@ -230,7 +234,7 @@ def test_vote_option_success(client):
         }
     }
 
-    response = client.post(f'/boxes/{box_id}/vote', json=data, headers=headers1)
+    response = client.put(f'/boxes/{box_id}/vote', json=data, headers=headers1)
     assert response.status_code == 200
     assert {"message": "Update vote successfully"} == json.loads(response.data)
 
