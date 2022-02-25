@@ -6,8 +6,8 @@ from sqlalchemy import func
 
 from app import db
 from app.models.conversations import ConversationModel
-from app.schemas.conversations import ConversationSchema, UpdateConversationSchema
-from app.helpers import validate_input
+from app.schemas.conversations import UpdateConversationSchema
+from app.helpers import token_required, validate_input
 
 conversations_blueprint = Blueprint("conversations", __name__)
 
@@ -15,18 +15,17 @@ secret_key = current_app.config["SECRET_KEY"]
 
 
 @conversations_blueprint.route("/conversations", methods=["POST"])
-@validate_input(schema=ConversationSchema)
-def create_new_conversation(data):
+@token_required
+def create_new_conversation(user_id):
     """
     Create a new conversation between user and WizAid
-    :param data: a dictionary with
-        - 'username' : username of user
+    :param data: {}
     :return: {
         "message": <the first question sending to user>
     }
     """
     # Create new conversation based on username
-    new_conversation = ConversationModel(username=data['username'])
+    new_conversation = ConversationModel(user_id = user_id)
     db.session.add(new_conversation)
     db.session.commit()
 
@@ -36,22 +35,21 @@ def create_new_conversation(data):
 
 
 @conversations_blueprint.route("/conversations", methods=["PUT"])
+@token_required
 @validate_input(schema=UpdateConversationSchema)
-def update_answer(data):
+def update_answer(user_id, data):
     """
     Update the conversation in WizAId
     :param data: a dictionary with
-        - 'username' : username of user
         - 'answer': the answer of user for current question
     :return:
         - (str) the response of the chatbot regarding to user's answer provided
     """
-    username = data['username']
     answer = data['answer']
 
     # Query the latest conversation of current username
     conversation_id = db.session.query(func.max(ConversationModel.id)).filter(
-        ConversationModel.username == username).first()
+        ConversationModel.user_id == user_id).first()
     conversation = db.session.query(ConversationModel).filter(ConversationModel.id == conversation_id[0]).first()
 
     # Loads the existed answers list
