@@ -8,8 +8,8 @@ class FoodModel(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
-    metadata =  db.Column(db.String(100), nullable=False)
+    data =  db.Column(db.String(100), nullable=False)
 
-    def __init__(self, user_id, metadata):
+    def __init__(self, user_id, data):
         self.user_id = user_id
-        self.metadata = metadata
+        self.data = data
