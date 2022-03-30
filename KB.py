@@ -1,10 +1,10 @@
-KB_headers = """
+KB_headers = '''
 %  Tell prolog that known/3 will be added later by asserta
 :- dynamic known/3.
 :- discontiguous ask/2.
 :- discontiguous numberask/2.
-:- discontiguous menuask/3.              
-"""
+:- discontiguous menuask/3.  
+'''            
 
 question = {
     'preference': 'What is your preference food?',
@@ -32,7 +32,7 @@ food_data = [
     {'name': 'dandan_noodle',
     'preference': 'asian',
     'soup': 'no',
-    'fry': 'yes',
+    'origin': 'china',
     'calories': '378'},
     {'name': 'pho',
     'preference': 'asian',
@@ -40,6 +40,7 @@ food_data = [
     'origin': 'vietnam',
     'calories': '400'},
     {'name': 'kebab',
+    'preference': 'eastern',
     'contain_meat': 'yes',
     'use_rice': 'yes',
     'heavy_portion': 'yes',

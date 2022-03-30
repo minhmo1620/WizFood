@@ -1,20 +1,12 @@
 import json
+
 from KB import *
+from app.models.knowledgebases import KnowledgeBaseModel
+from app.db import db
 
 def create_KB(user_id):
-    if user_id > 0:
-        foods = ""
-
-        for food in food_data:
-            foods += create_food_KB(food)
-        
-        calories_dict = create_categories_dict(food_data)
-
-        askables = create_askables(askable_dict)
-
-        KB = KB_headers + foods + calories_dict + calories_rules + askables + rules
-        return KB
-    return ""
+    knowledgebase = db.session.query(KnowledgeBaseModel).filter_by(user_id=user_id).first()
+    return knowledgebase.update_kb()
 
 def create_food_KB(food):
     name = food["name"]
