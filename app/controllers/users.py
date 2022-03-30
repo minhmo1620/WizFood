@@ -2,6 +2,7 @@ from flask import Blueprint, jsonify, current_app
 
 from app import db
 from app.models.users import UserModel
+from app.models.knowledgebases import KnowledgeBaseModel 
 from app.schemas.users import UserSchema
 from app.helpers import hash_password, validate_input, create_salt, encode
 
@@ -36,6 +37,11 @@ def create_user(data):
 
     new_user = UserModel(username, hashed_password, salt)
     db.session.add(new_user)
+    db.session.commit()
+
+    user = db.session.query(UserModel).filter_by(username=username).first()
+    new_knowledge_base = KnowledgeBaseModel(user.id)
+    db.session.add(new_knowledge_base)
     db.session.commit()
 
     return jsonify({"message": "Signup successfully"}), 201
