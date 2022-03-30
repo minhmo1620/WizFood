@@ -30,7 +30,7 @@ def create_new_conversation(user_id):
     db.session.commit()
 
     # Run model to have the first question
-    response = execute_models([])
+    response = execute_models(user_id, [])
     return jsonify(json.loads(response)), 201
 
 
@@ -46,7 +46,6 @@ def update_answer(user_id, data):
         - (str) the response of the chatbot regarding to user's answer provided
     """
     answer = data['answer']
-    print('answer', answer)
 
     # Query the latest conversation of current username
     conversation_id = db.session.query(func.max(ConversationModel.id)).filter(
@@ -58,12 +57,9 @@ def update_answer(user_id, data):
 
     # Append new answer to answers list
     answers.append(answer)
-    print("answers", answers)
-    print("answers_type", type(answers))
 
     # Run model to get the next question
-    response = execute_models(answers)
-    print('response', response)
+    response = execute_models(user_id, answers)
 
     # If user's answer is not validated
     if response[:5] == 'Error':
@@ -75,11 +71,12 @@ def update_answer(user_id, data):
     return jsonify(json.loads(response)), 200
 
 
-def execute_models(user_answers):
+def execute_models(user_id, user_answers):
     # Join the list of answers to a string format a,b,c
     answers = ','.join(user_answers)
+    inputs = str(user_id) + ',' + answers
     # Create shell command
-    create_command = "python app/AI_models/models.py " + answers
+    create_command = "python app/AI_models/models.py " + inputs
     # Run model with answers as argument
     response = subprocess.run(create_command, shell=True, capture_output=True)
     return response.stdout.decode('UTF-8')

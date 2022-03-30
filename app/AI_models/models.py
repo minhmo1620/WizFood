@@ -6,7 +6,7 @@ from model_helpers import *
 from KB import *
 
 
-def run_model(user_answer):
+def run_model(user_id, user_answer):
     asked = {}
     user_inputs = [user_answer, 0]
     questions = []
@@ -103,7 +103,7 @@ def run_model(user_answer):
 
     # Create a temporary file with the KB in it
     (FD, name) = tempfile.mkstemp(suffix='.pl', text=True)
-    KB = create_KB()
+    KB = create_KB(user_id)
     with os.fdopen(FD, "w") as text_file:
         text_file.write(KB)
 
@@ -130,8 +130,7 @@ def run_model(user_answer):
 
 
 if __name__ == "__main__":
-    try:
-        user_answers = list(sys.argv[1].split(','))
-    except IndexError:
-        user_answers = []
-    print(run_model(user_answers))
+    inputs = list(sys.argv[1].split(','))
+    user_id = int(inputs[0])
+    user_answers = inputs[1:] if len(inputs[1]) > 0 else []
+    print(run_model(user_id, user_answers))

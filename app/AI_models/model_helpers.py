@@ -1,18 +1,20 @@
 import json
 from KB import *
 
-def create_KB():
-    foods = ""
+def create_KB(user_id):
+    if user_id > 0:
+        foods = ""
 
-    for food in food_data:
-        foods += create_food_KB(food)
-    
-    calories_dict = create_categories_dict(food_data)
+        for food in food_data:
+            foods += create_food_KB(food)
+        
+        calories_dict = create_categories_dict(food_data)
 
-    askables = create_askables(askable_dict)
+        askables = create_askables(askable_dict)
 
-    KB = KB_headers + foods + calories_dict + calories_rules + askables + rules
-    return KB
+        KB = KB_headers + foods + calories_dict + calories_rules + askables + rules
+        return KB
+    return ""
 
 def create_food_KB(food):
     name = food["name"]
