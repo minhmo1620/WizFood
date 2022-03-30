@@ -46,12 +46,14 @@ def create_app(env):
         from .controllers.boxes import boxes_blueprint
         from .controllers.options import options_blueprint
         from .controllers.votes import votes_blueprint
+        from .controllers.foods import foods_blueprint
 
         app.register_blueprint(users_blueprint, url_prefix="/")
         app.register_blueprint(conversations_blueprint, url_prefix="/")
         app.register_blueprint(boxes_blueprint, url_prefix="/")
         app.register_blueprint(options_blueprint, url_prefix="/")
         app.register_blueprint(votes_blueprint, url_prefix="/")
+        app.register_blueprint(foods_blueprint, url_prefix="/")
 
         db.create_all()
 
