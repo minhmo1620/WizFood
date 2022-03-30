@@ -8,6 +8,7 @@ marshmallow ==3.14.0
 pytest == 6.2.5
 pyswip == 0.2.10
 psycopg2 == 2.9.3
+psycopg2-binary == 2.9.3
 Flask-Threads == 0.1.0
 py-object-pool == 1.1
 swiplserver == 1.0.0
