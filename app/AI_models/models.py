@@ -3,7 +3,7 @@ from pyswip.prolog import Prolog
 from pyswip.easy import *
 
 from model_helpers import *
-from KB import ModelConfig
+from KB import *
 
 
 def run_model(user_answer):
@@ -103,8 +103,9 @@ def run_model(user_answer):
 
     # Create a temporary file with the KB in it
     (FD, name) = tempfile.mkstemp(suffix='.pl', text=True)
+    KB = create_KB()
     with os.fdopen(FD, "w") as text_file:
-        text_file.write(ModelConfig.KB)
+        text_file.write(KB)
 
     prolog.consult(name)  # open the KB for consulting
     os.unlink(name)  # Remove the temporary file
@@ -116,9 +117,15 @@ def run_model(user_answer):
         for i in recommend:
             res.append(i['D'])
 
-        questions.append('Our recommendation is:' + ''.join(str(e) for e in res))
+        questions.append(json.dumps({
+            "message": 'Our recommendation is:' + ''.join(str(e) for e in res),
+            "options": []
+            }))
     else:
-        questions.append('unknown.')
+        questions.append(json.dumps({
+            "message": 'Sorry, no food in the database fits your requirements',
+            "options": []
+            }))
     return questions[len(user_inputs[0])]
 
 
