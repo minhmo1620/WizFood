@@ -2,6 +2,7 @@ from flask import Blueprint, jsonify
 
 from app import db
 from app.models.foods import FoodModel
+from app.models.knowledgebases import KnowledgeBaseModel
 from app.helpers import validate_input, token_required
 
 """
