@@ -31,7 +31,7 @@ def create_new_conversation(user_id):
 
     # Run model to have the first question
     response = execute_models([])
-    return jsonify({"message": response}), 201
+    return jsonify(json.loads(response)), 201
 
 
 @conversations_blueprint.route("/conversations", methods=["PUT"])
@@ -46,6 +46,7 @@ def update_answer(user_id, data):
         - (str) the response of the chatbot regarding to user's answer provided
     """
     answer = data['answer']
+    print('answer', answer)
 
     # Query the latest conversation of current username
     conversation_id = db.session.query(func.max(ConversationModel.id)).filter(
@@ -57,9 +58,12 @@ def update_answer(user_id, data):
 
     # Append new answer to answers list
     answers.append(answer)
+    print("answers", answers)
+    print("answers_type", type(answers))
 
     # Run model to get the next question
     response = execute_models(answers)
+    print('response', response)
 
     # If user's answer is not validated
     if response[:5] == 'Error':
@@ -68,7 +72,7 @@ def update_answer(user_id, data):
     # If the user's answer is accepted, return the question
     conversation.answers = json.dumps(answers)
     db.session.commit()
-    return jsonify({"message": response}), 200
+    return jsonify(json.loads(response)), 200
 
 
 def execute_models(user_answers):
