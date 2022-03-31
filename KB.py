@@ -6,21 +6,6 @@ KB_headers = '''
 :- discontiguous menuask/3.  
 '''            
 
-question = {
-    'preference': 'What is your preference food?',
-    'expected_calories': 'How many calories do you want to eat today?',
-    'origin': 'Which country do you to have food today?',
-    'spicy': 'Do you want spicy food',
-    'noodle': 'Do you want some noodle?',
-    'rice': 'Do you want rice?',
-    'sambal': 'Do you want samble?',
-    'coconutmilk': 'Do you want food that contains coconutmilk?',
-    'fry': 'Do you want fried food?',
-    'soup': 'Do you want soup?',
-    'meat': 'Do you want meat in your meal?',
-    'heavy_portion': 'Do you want heavy portion food?',
-    'bread': 'Do you want to have bread?'
-}
 food_data = [
     {'name': 'nasic_lemak',
     'preference': 'asian',
@@ -65,67 +50,6 @@ min_difference([L|Ls], Min, X0, Base, X) :- diff(Base, L, Z), Z >= Min, min_diff
 
 min_difference([L|Ls], Min, X0, Base, X) :- diff(Base, L, Z), Z < Min, min_difference(Ls, Min, L, Base, X).
 '''
-
-askable_dict = {
-    "expected_calories": {
-        "type": "numberask",
-        "question" : "How many calories do you want today?"
-    },
-    "preference": {
-        "type": "menuask",
-        "question": "",
-        "choices": ["asian", "western", "eastern"]
-    },
-    "origin": {
-        "type": "menuask",
-        "question": "",
-        "choices": ["vietnam", "france", "china"]
-    },
-    "spicy": {
-        "type": "ask",
-        "question": ""
-    },
-    "noodle": {
-        "type": "ask",
-        "question": ""
-    },
-    "rice": {
-        "type": "ask",
-        "question": ""
-    },
-    "sambal": {
-        "type": "ask",
-        "question": ""
-    },
-    "coconutmilk": {
-        "type": "ask",
-        "question": ""
-    },
-    "fry": {
-        "type": "ask",
-        "question": ""
-    },
-    "soup": {
-        "type": "ask",
-        "question": ""
-    },
-    "spicy": {
-        "type": "ask",
-        "question": ""
-    },
-    "meat": {
-        "type": "ask",
-        "question": ""
-    },
-    "heavy_portion": {
-        "type": "ask",
-        "question": ""
-    },
-    "bread": {
-        "type": "ask",
-        "question": ""
-    },
-}
 
 rules = """
 % Remember what I've been told is correct
@@ -195,4 +119,3 @@ check_val(Ans, Attr, Val, List) :-
     read_py_menuask(Attr, Ans, List),
     menuask(Attr, Val, List).
 """
-
