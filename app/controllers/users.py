@@ -37,7 +37,6 @@ def create_user(data):
 
     new_user = UserModel(username, hashed_password, salt)
     db.session.add(new_user)
-    db.session.commit()
 
     user = db.session.query(UserModel).filter_by(username=username).first()
     new_knowledge_base = KnowledgeBaseModel(user.id)
