@@ -49,9 +49,4 @@ def create_new_food(user_id, data):
     new_food = FoodModel(user_id, data["name"], json.dumps(food_data))
     db.session.add(new_food)
 
-    # Update KB
-    KB = db.session.query(KnowledgeBaseModel).filter(user_id == user_id).first()
-    KB.update_kb()
-    db.session.commit()
-
     return jsonify({"message": "Added the food to the knowledge base successfully"}), 201
