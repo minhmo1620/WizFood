@@ -1,7 +1,7 @@
 import json
 
 from app import db
-from KB import KB_headers, calories_rules, rules, food_data, askable_dict
+from KB import KB_headers, calories_rules, rules, food_data
 
 
 class KnowledgeBaseModel(db.Model):
@@ -20,7 +20,7 @@ class KnowledgeBaseModel(db.Model):
     def __init__(self, user_id):
         self.user_id = user_id
         self.foods = json.dumps(food_data)
-        self.askable_dict = json.dumps(askable_dict)
+        self.askable_dict = json.dumps(create_askable_dict(food_data))
         self.kb_header = KB_headers
         self.calories_rules = calories_rules
         self.rules = rules
@@ -39,6 +39,15 @@ class KnowledgeBaseModel(db.Model):
         self.kb = self.kb_header + foods_data + calories_dict + self.calories_rules + askables + self.rules
         
         return self.kb
+    
+    def get_questions_dict(self):
+        questions_dict = {}
+        askable_dict = json.loads(self.askable_dict)
+        for k, v in askable_dict.items():
+            questions_dict[k] = v["question"]
+        
+        return questions_dict
+
 
 def create_food_KB(food):
     name = food["name"]
@@ -85,56 +94,48 @@ def convert_list_to_str(a):
     return res
 
 
-def create_ask_question(A, V):
-    """
-    Create question to ask users includes 
-    - questions for askables
-    - options with numbered list
-    - error for previous input
-    """
-    if str(A) == 'ingredient':
-        askable_question = 'Do you want ' + str(V) +' ?'
-    else:
-        askable_question = str(question[str(A)])
-    return json.dumps({
-        "message": askable_question,
-        "options": ["yes", "no"]
-    })
-    
-def create_numberask_question(A):
-    """
-    Create questions to ask for number
-    """
-    askable_question = question[str(A)]+'\n'+'Your answer is: ' if str(A) in question else str(A)
-    return json.dumps({
-        "message": askable_question,
-        "options": []
-    })
+def create_askable_dict(food_data):
+    askable_dict = {
+        "preference": {
+            "type":"menuask",
+            "question": "What is your preference food today?",
+            "choices": []
+        },
+        "expected_calories": {
+            "type": "numberask",
+            "question" : "How many calories do you want today?"
+        },
+        "origin": {
+            "type": "menuask",
+            "question": "Which country do you want to have food today?",
+            "choices": []
+        },
+    }
 
-def create_menuask_question(A, menu):
-    """
-    Create questions to have menuasks
-    """
-    menuask_question = question[str(A)]
-    menu_list = [str(i) for i in menu]
-    
-    return json.dumps({
-        "message": menuask_question,
-        "options": menu_list
-    })
+    for food in food_data:
+        for k, v in food.items():
+            if k == "name" or k == "calories":
+                continue
+            elif k == "ingredients":
+                for ingredient in v:
+                    if ingredient not in askable_dict:
+                        ingredient_name = format_food_name(ingredient)
+                        askable_dict[ingredient] = {
+                            "type": "ask",
+                            "question": f"Do you want to have food with {ingredient_name} today?"
+                        }
+            elif k in ["preference", "origin"]:
+                if v not in askable_dict[k]["choices"]:
+                    askable_dict[k]["choices"].append(v)
+            
+            else:
+                if k not in askable_dict:
+                    display_name = format_food_name(k)
+                    askable_dict[k] = {
+                        "type": "ask",
+                        "question": f"Do you want {display_name} today?"
+                    }
+    return askable_dict
 
-question = {
-    'preference': 'What is your preference food?',
-    'expected_calories': 'How many calories do you want to eat today?',
-    'origin': 'Which country do you to have food today?',
-    'spicy': 'Do you want spicy food',
-    'noodle': 'Do you want some noodle?',
-    'use_rice': 'Do you want rice?',
-    'has_sambal': 'Do you want samble?',
-    'contain_coconutmilk': 'Do you want food that contains coconutmilk?',
-    'fry': 'Do you want fried food?',
-    'soup': 'Do you want soup?',
-    'contain_meat': 'Do you want meat in your meal?',
-    'heavy_portion': 'Do you want heavy portion food?',
-    'use_bread': 'Do you want to have bread?'
-}
+def format_food_name(food_name):
+    return ' '.join(food_name.split('_'))
