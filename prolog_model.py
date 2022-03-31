@@ -4,7 +4,6 @@ from pyswip.easy import *
 
 from model_helpers import *
 from KB import *
-# from ..helpers import create_KB
 
 
 def run_model(user_id, user_answer):
