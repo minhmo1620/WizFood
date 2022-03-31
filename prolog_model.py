@@ -10,6 +10,7 @@ def run_model(user_id, user_answer):
     asked = {}
     user_inputs = [user_answer, 0]
     questions = []
+    questions_dict = get_questions_dict(user_id)
 
     # Define foreign functions for getting user input and writing to the screen
     def write_py(X):
@@ -21,7 +22,7 @@ def run_model(user_id, user_answer):
             # Asking for the input for the first time
             if A not in asked:
                 # Create question
-                questions.append(create_ask_question(A, V))
+                questions.append(create_ask_question(A, V, question=questions_dict))
                 # Ask user
                 try:
                     user_input = read_input()
@@ -43,7 +44,7 @@ def run_model(user_id, user_answer):
         # V is Variable, V is number of calories in our context
         if isinstance(V, Variable):
             if A not in asked:
-                questions.append(create_numberask_question(A))
+                questions.append(create_numberask_question(A, question=questions_dict))
                 try:
                     user_input = read_input()
                 except IndexError:
@@ -63,7 +64,7 @@ def run_model(user_id, user_answer):
         # X is a member of MenuList
         if isinstance(X, Variable):
             if A not in asked:
-                questions.append(create_menuask_question(A, MenuList))
+                questions.append(create_menuask_question(A, MenuList, question=questions_dict))
                 try:
                     user_input = read_input()
                     if user_input not in (map(str, MenuList)):
