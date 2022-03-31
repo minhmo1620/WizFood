@@ -56,7 +56,7 @@ def validate_input(schema):
 
             # check the validity of the input
             try:
-                schema().load(data)
+                data = schema().load(data)
             except ValidationError as err:
                 return jsonify(err.messages), 400
             return f(*args, **kwargs, data=data)
