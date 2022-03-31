@@ -47,7 +47,7 @@ class KnowledgeBaseModel(db.Model):
         askables = create_askables(json.loads(self.askable_dict))
 
         # Update the KB
-        self.kb = self.kb_header + foods_data + calories_dict + self.calories_rules + askables + self.rules
+        self.kb = json.dumps(self.kb_header + foods_data + calories_dict + self.calories_rules + askables + self.rules)
         
         return self.kb
     
@@ -116,7 +116,7 @@ def create_askable_dict(food_data):
     askable_dict = {
         "preference": {
             "type":"menuask",
-            "question": "What is your preference food today?",
+            "question": "What is your preference food cuisine today?",
             "choices": []
         },
         "expected_calories": {
@@ -128,6 +128,11 @@ def create_askable_dict(food_data):
             "question": "Which country do you want to have food today?",
             "choices": []
         },
+        "cooking_method": {
+            "type": "menuask",
+            "question": "Please choose your prefered cooking method",
+            "choices": []
+        }
     }
 
     for food in food_data:
@@ -142,7 +147,7 @@ def create_askable_dict(food_data):
                             "type": "ask",
                             "question": f"Do you want to have food with {ingredient_name} today?"
                         }
-            elif k in ["preference", "origin"]:
+            elif k in ["preference", "origin", "cooking_method"]:
                 if v not in askable_dict[k]["choices"]:
                     askable_dict[k]["choices"].append(v)
             
