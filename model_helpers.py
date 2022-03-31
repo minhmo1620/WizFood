@@ -90,19 +90,3 @@ def create_menuask_question(A, menu):
         "message": menuask_question,
         "options": menu_list
     })
-
-question = {
-    'preference': 'What is your preference food?',
-    'expected_calories': 'How many calories do you want to eat today?',
-    'origin': 'Which country do you to have food today?',
-    'spicy': 'Do you want spicy food',
-    'noodle': 'Do you want some noodle?',
-    'use_rice': 'Do you want rice?',
-    'has_sambal': 'Do you want samble?',
-    'contain_coconutmilk': 'Do you want food that contains coconutmilk?',
-    'fry': 'Do you want fried food?',
-    'soup': 'Do you want soup?',
-    'contain_meat': 'Do you want meat in your meal?',
-    'heavy_portion': 'Do you want heavy portion food?',
-    'use_bread': 'Do you want to have bread?'
-}

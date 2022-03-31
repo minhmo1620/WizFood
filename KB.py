@@ -12,23 +12,23 @@ question = {
     'origin': 'Which country do you to have food today?',
     'spicy': 'Do you want spicy food',
     'noodle': 'Do you want some noodle?',
-    'use_rice': 'Do you want rice?',
-    'has_sambal': 'Do you want samble?',
-    'contain_coconutmilk': 'Do you want food that contains coconutmilk?',
+    'rice': 'Do you want rice?',
+    'sambal': 'Do you want samble?',
+    'coconutmilk': 'Do you want food that contains coconutmilk?',
     'fry': 'Do you want fried food?',
     'soup': 'Do you want soup?',
-    'contain_meat': 'Do you want meat in your meal?',
+    'meat': 'Do you want meat in your meal?',
     'heavy_portion': 'Do you want heavy portion food?',
-    'use_bread': 'Do you want to have bread?'
+    'bread': 'Do you want to have bread?'
 }
 food_data = [
     {'name': 'nasic_lemak',
     'preference': 'asian',
-    'use_rice': 'yes',
-    'has_sambal': 'yes',
-    'contain_coconutmilk': 'yes',
+    'rice': 'yes',
+    'sambal': 'yes',
+    'coconutmilk': 'yes',
     'calories': '644'},
-    {'name': 'fried_rice', 'use_rice': 'yes', 'fry': 'yes', 'calories': '800'},
+    {'name': 'fried_rice', 'rice': 'yes', 'fry': 'yes', 'calories': '800'},
     {'name': 'dandan_noodle',
     'preference': 'asian',
     'soup': 'no',
@@ -41,13 +41,13 @@ food_data = [
     'calories': '400'},
     {'name': 'kebab',
     'preference': 'eastern',
-    'contain_meat': 'yes',
-    'use_rice': 'yes',
+    'meat': 'yes',
+    'rice': 'yes',
     'heavy_portion': 'yes',
     'calories': '2000'},
     {'name': 'baguette',
     'preference': 'western',
-    'use_bread': 'yes',
+    'bread': 'yes',
     'origin': 'france',
     'calories': '130'}
 ]
@@ -91,15 +91,15 @@ askable_dict = {
         "type": "ask",
         "question": ""
     },
-    "use_rice": {
+    "rice": {
         "type": "ask",
         "question": ""
     },
-    "has_sambal": {
+    "sambal": {
         "type": "ask",
         "question": ""
     },
-    "contain_coconutmilk": {
+    "coconutmilk": {
         "type": "ask",
         "question": ""
     },
@@ -115,7 +115,7 @@ askable_dict = {
         "type": "ask",
         "question": ""
     },
-    "contain_meat": {
+    "meat": {
         "type": "ask",
         "question": ""
     },
@@ -123,7 +123,7 @@ askable_dict = {
         "type": "ask",
         "question": ""
     },
-    "use_bread": {
+    "bread": {
         "type": "ask",
         "question": ""
     },
