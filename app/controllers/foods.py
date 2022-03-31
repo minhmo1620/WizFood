@@ -23,13 +23,12 @@ def get_foods(user_id):
 
 
 @foods_blueprint.route("/foods", methods=["POST"])
-# @token_required
+@token_required
 @validate_input(schema=FoodSchema)
-def create_new_food(data):
+def create_new_food(user_id, data):
     """
 
     """
-    user_id = 1
     food_data = {
         "name": data["name"],
         "preference": data["preference"],
@@ -41,11 +40,18 @@ def create_new_food(data):
     }
 
     # Check existing food
-    food = db.session.query(FoodModel).filter(FoodModel.user_id == user_id and FoodModel.name==data["name"]).first()
+    food = db.session.query(FoodModel).\
+        filter(FoodModel.user_id == user_id, FoodModel.name == data["name"]).first()
     if food:
         return jsonify({"message": "Existed food"}), 400
 
+    # Create new food
     new_food = FoodModel(user_id, data["name"], json.dumps(food_data))
     db.session.add(new_food)
+
+    # Update KB
+    KB = db.session.query(KnowledgeBaseModel).filter(user_id == user_id).first()
+    KB.update_kb()
     db.session.commit()
+
     return jsonify({"message": "Added the food to the knowledge base successfully"}), 201
