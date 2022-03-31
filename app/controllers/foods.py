@@ -3,7 +3,6 @@ from flask import Blueprint, jsonify
 
 from app import db
 from app.models.foods import FoodModel
-from app.models.knowledgebases import KnowledgeBaseModel
 from app.schemas.foods import FoodSchema
 from app.helpers import validate_input, token_required
 
@@ -48,5 +47,6 @@ def create_new_food(user_id, data):
     # Create new food
     new_food = FoodModel(user_id, data["name"], json.dumps(food_data))
     db.session.add(new_food)
+    db.session.commit()
 
     return jsonify({"message": "Added the food to the knowledge base successfully"}), 201
