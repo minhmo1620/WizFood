@@ -1,9 +1,11 @@
+import json
+
 import tempfile
 from pyswip.prolog import Prolog
 from pyswip.easy import *
 
-from model_helpers import *
-from KB import *
+from model_helpers import get_questions_dict, create_KB, \
+    create_ask_question, create_menuask_question, create_numberask_question
 
 
 def run_model(user_id, user_answer):
@@ -11,6 +13,7 @@ def run_model(user_id, user_answer):
     user_inputs = [user_answer, 0]
     questions = []
     questions_dict = get_questions_dict(user_id)
+    KB = create_KB(user_id)
 
     # Define foreign functions for getting user input and writing to the screen
     def write_py(X):
@@ -104,7 +107,6 @@ def run_model(user_id, user_answer):
 
     # Create a temporary file with the KB in it
     (FD, name) = tempfile.mkstemp(suffix='.pl', text=True)
-    KB = create_KB(user_id)
     with os.fdopen(FD, "w") as text_file:
         text_file.write(KB)
 
@@ -119,7 +121,7 @@ def run_model(user_id, user_answer):
             res.append(i['D'])
 
         questions.append(json.dumps({
-            "message": 'Our recommendation is:' + ''.join(str(e) for e in res),
+            "message": 'Our recommendation is: ' + ','.join(' '.join(str(e).split('_')) for e in res),
             "options": []
             }))
     else:
