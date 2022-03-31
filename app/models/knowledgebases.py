@@ -1,6 +1,7 @@
 import json
 
 from app import db
+from app.models.foods import FoodModel
 from KB import KB_headers, calories_rules, rules, food_data
 
 
@@ -27,18 +28,31 @@ class KnowledgeBaseModel(db.Model):
         self.kb = self.update_kb()
     
     def update_kb(self):
-        foods_data = ""
+        # Get up-to-date food data of that user
+        user_food = get_food_data(self.user_id)
+        self.foods = json.dumps(food_data + user_food)
 
+        # Create foods_data (str)
+        foods_data = ""
         for food in json.loads(self.foods):
             foods_data += create_food_KB(food)
         
+        # Create calories_dict
         calories_dict = create_categories_dict(json.loads(self.foods))
 
+        # Update the askable_dict
+        self.update_askable_dict()
+
+        # Create askables (str)
         askables = create_askables(json.loads(self.askable_dict))
 
+        # Update the KB
         self.kb = self.kb_header + foods_data + calories_dict + self.calories_rules + askables + self.rules
         
         return self.kb
+    
+    def update_askable_dict(self):
+        self.askable_dict = json.dumps(create_askable_dict(json.loads(self.foods)))
     
     def get_questions_dict(self):
         questions_dict = {}
@@ -48,6 +62,10 @@ class KnowledgeBaseModel(db.Model):
         
         return questions_dict
 
+def get_food_data(user_id):
+    list_foods = db.session.query(FoodModel).filter(FoodModel.user_id == user_id).all()
+
+    return [json.loads(food.data) for food in list_foods]
 
 def create_food_KB(food):
     name = food["name"]
