@@ -31,6 +31,7 @@ def create_new_food(user_id, data):
     food_data = {
         "name": data["name"],
         "ingredients": data["ingredients"],
+        "calories": data["calories"]
     }
 
     for k in ["preference", "origin", "cooking_method"]:

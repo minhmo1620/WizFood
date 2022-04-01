@@ -8,7 +8,7 @@ def create_KB(user_id):
     knowledgebase = db.session.query(KnowledgeBaseModel).filter_by(user_id=user_id).first()
     knowledgebase.update_kb()
     db.session.commit()
-    return json.loads(knowledgebase.kb)
+    return knowledgebase.kb
 
 def get_questions_dict(user_id):
     knowledgebase = db.session.query(KnowledgeBaseModel).filter_by(user_id=user_id).first()

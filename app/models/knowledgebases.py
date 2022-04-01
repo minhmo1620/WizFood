@@ -47,7 +47,7 @@ class KnowledgeBaseModel(db.Model):
         askables = create_askables(json.loads(self.askable_dict))
 
         # Update the KB
-        self.kb = json.dumps(self.kb_header + foods_data + calories_dict + self.calories_rules + askables + self.rules)
+        self.kb = self.kb_header + foods_data + calories_dict + self.calories_rules + askables + self.rules
         
         return self.kb
     
