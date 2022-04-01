@@ -1,38 +1,21 @@
-KB_headers = """
+KB_headers = '''
 %  Tell prolog that known/3 will be added later by asserta
 :- dynamic known/3.
 :- discontiguous ask/2.
 :- discontiguous numberask/2.
-:- discontiguous menuask/3.              
-"""
+:- discontiguous menuask/3.  
+'''            
 
-question = {
-    'preference': 'What is your preference food?',
-    'expected_calories': 'How many calories do you want to eat today?',
-    'origin': 'Which country do you to have food today?',
-    'spicy': 'Do you want spicy food',
-    'noodle': 'Do you want some noodle?',
-    'use_rice': 'Do you want rice?',
-    'has_sambal': 'Do you want samble?',
-    'contain_coconutmilk': 'Do you want food that contains coconutmilk?',
-    'fry': 'Do you want fried food?',
-    'soup': 'Do you want soup?',
-    'contain_meat': 'Do you want meat in your meal?',
-    'heavy_portion': 'Do you want heavy portion food?',
-    'use_bread': 'Do you want to have bread?'
-}
 food_data = [
     {'name': 'nasic_lemak',
     'preference': 'asian',
-    'use_rice': 'yes',
-    'has_sambal': 'yes',
-    'contain_coconutmilk': 'yes',
+    'ingredients': ['rice', 'sambal', 'coconutmilk'],
     'calories': '644'},
-    {'name': 'fried_rice', 'use_rice': 'yes', 'fry': 'yes', 'calories': '800'},
+    {'name': 'fried_rice', 'ingredients': ['rice'], 'fry': 'yes', 'calories': '800'},
     {'name': 'dandan_noodle',
     'preference': 'asian',
     'soup': 'no',
-    'fry': 'yes',
+    'origin': 'china',
     'calories': '378'},
     {'name': 'pho',
     'preference': 'asian',
@@ -40,13 +23,14 @@ food_data = [
     'origin': 'vietnam',
     'calories': '400'},
     {'name': 'kebab',
-    'contain_meat': 'yes',
-    'use_rice': 'yes',
+    'preference': 'eastern',
+    'ingredients': ['rice'],
+    'meat': 'yes',
     'heavy_portion': 'yes',
     'calories': '2000'},
     {'name': 'baguette',
     'preference': 'western',
-    'use_bread': 'yes',
+    'ingredients': ['bread'],
     'origin': 'france',
     'calories': '130'}
 ]
@@ -66,67 +50,6 @@ min_difference([L|Ls], Min, X0, Base, X) :- diff(Base, L, Z), Z >= Min, min_diff
 
 min_difference([L|Ls], Min, X0, Base, X) :- diff(Base, L, Z), Z < Min, min_difference(Ls, Min, L, Base, X).
 '''
-
-askable_dict = {
-    "expected_calories": {
-        "type": "numberask",
-        "question" : "How many calories do you want today?"
-    },
-    "preference": {
-        "type": "menuask",
-        "question": "",
-        "choices": ["asian", "western", "eastern"]
-    },
-    "origin": {
-        "type": "menuask",
-        "question": "",
-        "choices": ["vietnam", "france", "china"]
-    },
-    "spicy": {
-        "type": "ask",
-        "question": ""
-    },
-    "noodle": {
-        "type": "ask",
-        "question": ""
-    },
-    "use_rice": {
-        "type": "ask",
-        "question": ""
-    },
-    "has_sambal": {
-        "type": "ask",
-        "question": ""
-    },
-    "contain_coconutmilk": {
-        "type": "ask",
-        "question": ""
-    },
-    "fry": {
-        "type": "ask",
-        "question": ""
-    },
-    "soup": {
-        "type": "ask",
-        "question": ""
-    },
-    "spicy": {
-        "type": "ask",
-        "question": ""
-    },
-    "contain_meat": {
-        "type": "ask",
-        "question": ""
-    },
-    "heavy_portion": {
-        "type": "ask",
-        "question": ""
-    },
-    "use_bread": {
-        "type": "ask",
-        "question": ""
-    },
-}
 
 rules = """
 % Remember what I've been told is correct
@@ -196,4 +119,3 @@ check_val(Ans, Attr, Val, List) :-
     read_py_menuask(Attr, Ans, List),
     menuask(Attr, Val, List).
 """
-

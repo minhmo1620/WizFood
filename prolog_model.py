@@ -1,15 +1,19 @@
+import json
+
 import tempfile
 from pyswip.prolog import Prolog
 from pyswip.easy import *
 
-from model_helpers import *
-from KB import *
+from model_helpers import get_questions_dict, create_KB, \
+    create_ask_question, create_menuask_question, create_numberask_question
 
 
-def run_model(user_answer):
+def run_model(user_id, user_answer):
     asked = {}
     user_inputs = [user_answer, 0]
     questions = []
+    questions_dict = get_questions_dict(user_id)
+    KB = create_KB(user_id)
 
     # Define foreign functions for getting user input and writing to the screen
     def write_py(X):
@@ -21,7 +25,7 @@ def run_model(user_answer):
             # Asking for the input for the first time
             if A not in asked:
                 # Create question
-                questions.append(create_ask_question(A, V))
+                questions.append(create_ask_question(A, V, question=questions_dict))
                 # Ask user
                 try:
                     user_input = read_input()
@@ -43,7 +47,7 @@ def run_model(user_answer):
         # V is Variable, V is number of calories in our context
         if isinstance(V, Variable):
             if A not in asked:
-                questions.append(create_numberask_question(A))
+                questions.append(create_numberask_question(A, question=questions_dict))
                 try:
                     user_input = read_input()
                 except IndexError:
@@ -63,7 +67,7 @@ def run_model(user_answer):
         # X is a member of MenuList
         if isinstance(X, Variable):
             if A not in asked:
-                questions.append(create_menuask_question(A, MenuList))
+                questions.append(create_menuask_question(A, MenuList, question=questions_dict))
                 try:
                     user_input = read_input()
                     if user_input not in (map(str, MenuList)):
@@ -103,7 +107,6 @@ def run_model(user_answer):
 
     # Create a temporary file with the KB in it
     (FD, name) = tempfile.mkstemp(suffix='.pl', text=True)
-    KB = create_KB()
     with os.fdopen(FD, "w") as text_file:
         text_file.write(KB)
 
@@ -118,7 +121,7 @@ def run_model(user_answer):
             res.append(i['D'])
 
         questions.append(json.dumps({
-            "message": 'Our recommendation is:' + ''.join(str(e) for e in res),
+            "message": 'Our recommendation is: ' + ','.join(' '.join(str(e).split('_')) for e in res),
             "options": []
             }))
     else:
@@ -130,8 +133,7 @@ def run_model(user_answer):
 
 
 if __name__ == "__main__":
-    try:
-        user_answers = list(sys.argv[1].split(','))
-    except IndexError:
-        user_answers = []
-    print(run_model(user_answers))
+    inputs = list(sys.argv[1].split(','))
+    user_id = int(inputs[0])
+    user_answers = inputs[1:] if len(inputs[1]) > 0 else []
+    print(run_model(user_id, user_answers))
