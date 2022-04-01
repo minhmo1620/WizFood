@@ -50,7 +50,7 @@ def vote_options(user_id, box_id, data):
     all_options = db.session.query(OptionModel).filter(OptionModel.box_id == box_id).all()
 
     # Validate the option in data
-    option_id_list = [str(option.id) for option in all_options]
+    option_id_list = [option.id for option in all_options]
     if sorted(option_id_list) != sorted(list(data.keys())):
         return jsonify({"message": "Please vote all available options"}), 400
 
@@ -62,9 +62,8 @@ def vote_options(user_id, box_id, data):
             return jsonify({"message": "Please choose the correct method"}), 400
 
         for option in all_options:
-            option_id = str(option.id)
             # Update the vote value
-            vote_value = data[option_id]
+            vote_value = data[option.id]
             option_vote_value = json.loads(option.vote)
             option_vote_value[vote_value] += 1
             option.vote = json.dumps(option_vote_value)
@@ -82,9 +81,8 @@ def vote_options(user_id, box_id, data):
         vote_data = json.loads(vote.data)
         for option in all_options:
             option_id = str(option.id)
-
             # Update the vote value
-            new_vote_value = data[option_id]
+            new_vote_value = data[option.id]
             old_vote_value = vote_data.get(option_id)
             option_vote_value = json.loads(option.vote)
 
