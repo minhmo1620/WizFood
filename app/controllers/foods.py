@@ -30,13 +30,12 @@ def create_new_food(user_id, data):
     """
     food_data = {
         "name": data["name"],
-        "preference": data["preference"],
-        "origin": data["origin"],
         "ingredients": data["ingredients"],
-        "vegeterian": "yes" if data["vegeterian"] else "no",
-        "cooking_method": data["cooking_method"],
-        "calories": data["calories"]
     }
+
+    for k in ["preference", "origin", "cooking_method"]:
+        if k in data and len(data[k]) > 0:
+            food_data[k] = data[k]
 
     # Check existing food
     food = db.session.query(FoodModel).\

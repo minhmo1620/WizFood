@@ -8,9 +8,9 @@ from .bases import Base
 class FoodSchema(Base):
     name = fields.Str(required=True, validate=validate.Length(max=100, min=1))
     ingredients = fields.Str(required=True, validate=validate.Length(max=200, min=1))
-    origin = fields.Str(required=False, validate=validate.Length(max=200, min=1))
-    preference = fields.Str(required=False, validate=validate.Length(max=200, min=1))
-    cooking_method = fields.Str(required=False, validate=validate.Length(max=200, min=1))
+    origin = fields.Str(required=False)
+    preference = fields.Str(required=False)
+    cooking_method = fields.Str(required=False)
     calories = fields.Int(required=False)
 
     @post_load
