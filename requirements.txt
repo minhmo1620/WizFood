@@ -6,6 +6,7 @@ PyMySQL == 1.0.2
 PyJWT == 2.3.0
 marshmallow ==3.14.0
 pytest == 6.2.5
+pytest-mock==3.1.1
 pyswip == 0.2.10
 psycopg2-binary == 2.9.3
 py-object-pool == 1.1
