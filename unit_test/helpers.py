@@ -4,7 +4,7 @@ import jwt
 from sqlalchemy import func
 from flask import current_app
 from app.models.foods import FoodModel
-
+from app.models.votes import VoteModel
 from app.models.users import UserModel
 from app.models.boxes import BoxModel
 from app.models.conversations import ConversationModel
@@ -94,6 +94,11 @@ def get_current_votes(box_id):
     for option in all_options:
         votes[option.id] = json.loads(option.vote)
     return votes
+
+def create_vote(user_id, box_id, data):
+    new_vote = VoteModel(user_id, box_id, json.dumps(data))
+    db.session.add(new_vote)
+    db.session.commit()
 
 def get_all_foods(user_id):
     all_foods = db.session.query(FoodModel).filter(FoodModel.user_id == user_id).all()
