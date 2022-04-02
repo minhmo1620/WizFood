@@ -40,7 +40,7 @@ def create_new_food(user_id, data):
     food_data = {
         "name": data["name"],
         "ingredients": data["ingredients"],
-        "calories": data["calories"]
+        "calories": int(data["calories"]) if "calories" in data else 0
     }
 
     for k in ["preference", "origin", "cooking_method"]:
