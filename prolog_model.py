@@ -118,10 +118,14 @@ def run_model(user_id, user_answer):
     if recommend:
         res = []
         for i in recommend:
-            res.append(i['D'])
+            if len(i['D']) > 0:
+                for j in i['D']:
+                    res.append(str(j))
+            else:
+                res.append(i['D'][0])
 
         questions.append(json.dumps({
-            "message": 'Our recommendation is: ' + ','.join(' '.join(str(e).split('_')) for e in res),
+            "message": 'Our recommendation is: ' + ', '.join(' '.join(str(e).split('_')) for e in res),
             "options": []
             }))
     else:
