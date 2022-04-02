@@ -1,6 +1,6 @@
 import json
 
-from unit_test.helpers import create_dummy_user, create_headers, create_dummy_user_with_knowledgeBase, get_all_foods
+from unit_test.helpers import create_headers, create_dummy_user_with_knowledgeBase, get_all_foods
 
 def test_create_new_food(client):
     token, user_id = create_dummy_user_with_knowledgeBase(username="mia", password="abc")
