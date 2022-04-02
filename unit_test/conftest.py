@@ -4,7 +4,7 @@ from app import create_app, db
 
 
 @pytest.fixture(scope='function')
-def client():
+def client(mocker):
     app = create_app('test')
     client = app.test_client()
 
