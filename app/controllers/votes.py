@@ -82,6 +82,8 @@ def vote_options(user_id, box_id, data):
         for option in all_options:
             option_id = str(option.id)
             # Update the vote value
+            # Note: The vote value in vote_data has keys as string 
+            # as json.dumps/loads change the type from int to str
             new_vote_value = data[option.id]
             old_vote_value = vote_data.get(option_id)
             option_vote_value = json.loads(option.vote)
