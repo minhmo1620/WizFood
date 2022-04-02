@@ -7,7 +7,7 @@ from app.schemas.foods import FoodSchema
 from app.helpers import validate_input, token_required
 
 """
-
+This endpoint allows users to customize their own KB by adding new food
 """
 foods_blueprint = Blueprint("foods", __name__)
 
@@ -16,8 +16,9 @@ foods_blueprint = Blueprint("foods", __name__)
 # @token_required
 def get_foods(user_id):
     """
-
+    Get all foods created by this user
     """
+    #TODO: Implement this if necessary
     pass
 
 
@@ -26,8 +27,16 @@ def get_foods(user_id):
 @validate_input(schema=FoodSchema)
 def create_new_food(user_id, data):
     """
-
+    Create new food
+    Inputs:
+        - name (str, required): The name of the food
+        - ingredients (str, required): List of ingredients, separated by comma
+        - calories (int): The calories of food. Default calories = 0.
+        - preference (str): The type of food cuisine
+        - origin (str): The country origin of the food
+        - cooking_method (str): Cooking method of the food
     """
+    # Create food_data based on the inputs (only add fields that are not empty string)
     food_data = {
         "name": data["name"],
         "ingredients": data["ingredients"],
