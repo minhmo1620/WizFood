@@ -10,8 +10,8 @@ addons:
     packages:
     - swi-prolog
 
-before_install:
-  - sudo apt-get update && apt-get -y install swi-prolog
+# before_install:
+#   - sudo apt-get update && apt-get -y install swi-prolog
 
 install:
   - pip install -r requirements.txt
