@@ -1,0 +1,30 @@
+sudo: required
+
+language: python
+
+python:
+  - "3.7"
+
+addons:
+  homebrew:
+    packages:
+    - swi-prolog
+
+# before_install:
+#   - sudo apt-get update && apt-get -y install swi-prolog
+
+install:
+  - pip install -r requirements.txt
+
+before_script:
+  - export DATABASE_URL='sqlite:///database.db'
+  - export FLASK_ENV=local
+  - export ENV=local
+  - export FLASK_APP=app
+  - export PYTHONPATH=.
+
+  - python3 -m flask run > /dev/null &
+  - while ! sudo lsof -Pi :5000 -sTCP:LISTEN -t; do sleep 1; done
+
+script:
+  - pytest unit_test
