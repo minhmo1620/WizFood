@@ -24,6 +24,7 @@ def create_user(data):
             - create new salt
             - hash password
             --> create new user (username, hashed password, salt)
+            - create one new knowledge base for this user
     """
     username = data["username"]
     password = data["password"]
@@ -38,6 +39,7 @@ def create_user(data):
     new_user = UserModel(username, hashed_password, salt)
     db.session.add(new_user)
 
+    # Create new knowledge base for this user
     user = db.session.query(UserModel).filter_by(username=username).first()
     new_knowledge_base = KnowledgeBaseModel(user.id)
     db.session.add(new_knowledge_base)
