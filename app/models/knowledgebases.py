@@ -2,7 +2,7 @@ import json
 
 from app import db
 from app.models.foods import FoodModel
-from KB import KB_headers, calories_rules, rules, food_data
+from KB import KB_HEADER, CALORIES_RULES, RULES, BASE_KB
 
 
 class KnowledgeBaseModel(db.Model):
@@ -20,17 +20,17 @@ class KnowledgeBaseModel(db.Model):
 
     def __init__(self, user_id):
         self.user_id = user_id
-        self.foods = json.dumps(food_data)
-        self.askable_dict = json.dumps(create_askable_dict(food_data))
-        self.kb_header = KB_headers
-        self.calories_rules = calories_rules
-        self.rules = rules
+        self.foods = json.dumps(BASE_KB)
+        self.askable_dict = json.dumps(create_askable_dict(BASE_KB))
+        self.kb_header = KB_HEADER
+        self.calories_rules = CALORIES_RULES
+        self.rules = RULES
         self.kb = self.update_kb()
     
     def update_kb(self):
         # Get up-to-date food data of that user
         user_food = get_food_data(self.user_id)
-        self.foods = json.dumps(food_data + user_food)
+        self.foods = json.dumps(BASE_KB + user_food)
 
         # Create foods_data (str)
         foods_data = ""

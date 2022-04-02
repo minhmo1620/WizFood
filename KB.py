@@ -1,4 +1,4 @@
-KB_headers = '''
+KB_HEADER = '''
 %  Tell prolog that known/3 will be added later by asserta
 :- dynamic known/3.
 :- discontiguous ask/2.
@@ -6,7 +6,7 @@ KB_headers = '''
 :- discontiguous menuask/3.  
 '''            
 
-food_data = [
+BASE_KB = [
     {'name': 'nasic_lemak',
     'preference': 'asian',
     'ingredients': ['rice', 'sambal', 'coconutmilk'],
@@ -35,7 +35,7 @@ food_data = [
     'calories': '130'}
 ]
 
-calories_rules = '''
+CALORIES_RULES = '''
 abs(X, Y) :- Y is sign(X) * X.
 calories(X, Y, Z) :- abs(X-Y, Z).
 recommend(X) :- bagof(Y, food(Y), Z), expected_calories(M), min_difference(Z, M, X).
@@ -69,7 +69,7 @@ min_difference([L|Ls], Min, X0, A, Base, X) :-
     min_difference(Ls, Min, L, [L], Base, X).
 '''
 
-rules = """
+RULES = """
 % Remember what I've been told is correct
 ask(Attr, Val) :- known(yes, Attr, Val), !.
 menuask(Attr, Val, _) :- known(yes, Attr, Val), !.
