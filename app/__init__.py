@@ -41,6 +41,7 @@ def create_app(env):
         return jsonify({"message": str(e)}), code
 
     with app.app_context():
+        from .controllers.home import home_blueprint
         from .controllers.users import users_blueprint
         from .controllers.conversations import conversations_blueprint
         from .controllers.boxes import boxes_blueprint
@@ -48,6 +49,7 @@ def create_app(env):
         from .controllers.votes import votes_blueprint
         from .controllers.foods import foods_blueprint
 
+        app.register_blueprint(home_blueprint, url_prefix="/")
         app.register_blueprint(users_blueprint, url_prefix="/")
         app.register_blueprint(conversations_blueprint, url_prefix="/")
         app.register_blueprint(boxes_blueprint, url_prefix="/")
