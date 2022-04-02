@@ -38,17 +38,35 @@ food_data = [
 calories_rules = '''
 abs(X, Y) :- Y is sign(X) * X.
 calories(X, Y, Z) :- abs(X-Y, Z).
-
 recommend(X) :- bagof(Y, food(Y), Z), expected_calories(M), min_difference(Z, M, X).
+
+addElement(X, [], [X]). 
+addElement(X, [Y | Rest], [X,Y | Rest]) :- X @< Y, !.
+addElement(X, [Y | Rest1], [Y | Rest2]) :- addElement(X, Rest1, Rest2).
 
 diff(Base, L, Z):- my_dict(Dc), R=Dc.L, calories(R, Base, Z).
 
-min_difference([L|Ls], Base, X) :- diff(Base, L, Z), min_difference(Ls, Z, L, Base, X).
+min_difference([L|Ls], Base, X) :-
+	diff(Base, L, Z),
+    min_difference(Ls, Z, L, [L], Base, X).
 
-min_difference([], Min, X, Base, X).
-min_difference([L|Ls], Min, X0, Base, X) :- diff(Base, L, Z), Z >= Min, min_difference(Ls, Min, X0, Base, X).
+min_difference([], Min, X0, X, Base, X).
 
-min_difference([L|Ls], Min, X0, Base, X) :- diff(Base, L, Z), Z < Min, min_difference(Ls, Min, L, Base, X).
+min_difference([L|Ls], Min, X0, X1, Base, X) :-
+	diff(Base, L, Z),
+    Z = Min,
+    addElement(L, X1, A),
+    min_difference(Ls, Min, L, A, Base, X).
+
+min_difference([L|Ls], Min, X0, A, Base, X) :-
+	diff(Base, L, Z),
+    Z > Min,
+    min_difference(Ls, Min, X0, A, Base, X).
+
+min_difference([L|Ls], Min, X0, A, Base, X) :-
+	diff(Base, L, Z),
+    Z < Min,
+    min_difference(Ls, Min, L, [L], Base, X).
 '''
 
 rules = """
