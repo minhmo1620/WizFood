@@ -2,9 +2,11 @@ import json
 
 import jwt
 from flask import current_app
+from app.models.foods import FoodModel
 
 from app.models.users import UserModel
 from app.models.boxes import BoxModel
+from app.models.knowledgebases import KnowledgeBaseModel
 from app.models.options import OptionModel
 from app.helpers import hash_password, create_salt
 from app.db import db
@@ -29,6 +31,16 @@ def create_dummy_user(username, password):
         return 401
     return jwt.encode({"user": username}, secret_key)
 
+def create_dummy_user_with_knowledgeBase(username, password):
+    token = create_dummy_user(username, password)
+
+    user = db.session.query(UserModel).filter(UserModel.username == username).first()
+
+    new_knowledge_base = KnowledgeBaseModel(user.id)
+    db.session.add(new_knowledge_base)
+    db.session.commit()
+
+    return token, user.id
 
 def create_headers(token):
     """
@@ -80,3 +92,7 @@ def get_current_votes(box_id):
     for option in all_options:
         votes[option.id] = json.loads(option.vote)
     return votes
+
+def get_all_foods(user_id):
+    all_foods = db.session.query(FoodModel).filter(FoodModel.user_id == user_id).all()
+    return all_foods
