@@ -6,7 +6,7 @@ from app.controllers.helpers import validate_box_id
 from app.helpers import validate_input, token_required
 from app.models.options import OptionModel
 from app.models.votes import VoteModel
-from app.schemas.votes import VoteSchema, VoteDateSchema
+from app.schemas.votes import VoteSchema, VoteDataSchema
 
 votes_blueprint = Blueprint("votes", __name__)
 
@@ -20,7 +20,7 @@ def get_vote_data(user_id, box_id):
 
     vote = db.session.query(VoteModel).filter(VoteModel.box_id == box_id).filter(VoteModel.user_id == user_id).first()
     if vote:
-        return jsonify(VoteDateSchema().dump(vote)), 200
+        return jsonify(VoteDataSchema().dump(vote)), 200
 
     return jsonify({}), 200
 

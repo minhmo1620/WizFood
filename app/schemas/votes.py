@@ -9,7 +9,7 @@ class VoteSchema(Base):
     votes = fields.Dict(keys=fields.Integer(), values=fields.Integer(validate=validate.Range(min=0, max=2)))
 
 
-class VoteDateSchema(Base):
+class VoteDataSchema(Base):
     id = fields.Int(required=False)
     data = fields.Str(required=False)
 
