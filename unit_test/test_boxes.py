@@ -75,3 +75,23 @@ def test_get_all_boxes(client):
         }
     ]
     assert expected_response == json.loads(response.data)
+
+def test_get_box(client):
+    # create header
+    token = create_dummy_user(username="mia", password="abc")
+    headers = create_headers(token)
+
+    # Invalid box ID
+    create_dummy_box(1, "Box 1", "Description 1")
+    response = client.get('/boxes/2', headers=headers)
+    assert response.status_code == 404
+    assert json.loads(response.data) == {"message": "Cannot find the wizbox"}
+
+    # Valid box ID
+    response = client.get('/boxes/1', headers=headers)
+    assert response.status_code == 200
+    assert json.loads(response.data) == {
+        "id": 1,
+        "name": "Box 1",
+        "description": "Description 1"
+    }
