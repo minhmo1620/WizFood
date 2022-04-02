@@ -5,12 +5,18 @@ from app.models.knowledgebases import KnowledgeBaseModel
 from app.db import db
 
 def create_KB(user_id):
+    """
+    Create the KB for each user & Update the KB
+    """
     knowledgebase = db.session.query(KnowledgeBaseModel).filter_by(user_id=user_id).first()
     knowledgebase.update_kb()
     db.session.commit()
     return knowledgebase.kb
 
 def get_questions_dict(user_id):
+    """
+    Generate questions dictionary to use in creating KB
+    """
     knowledgebase = db.session.query(KnowledgeBaseModel).filter_by(user_id=user_id).first()
     return knowledgebase.get_questions_dict()
 
