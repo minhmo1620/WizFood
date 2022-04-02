@@ -16,6 +16,7 @@ boxes_blueprint = Blueprint("boxes", __name__)
 @token_required
 def get_all_boxes(user_id):
     """
+    Get all boxes created by this user
     :param user_id:
     :return: All boxes created by user_id
     """
@@ -28,8 +29,10 @@ def get_all_boxes(user_id):
 @token_required
 def get_box(user_id, box_id):
     """
-    :param box_id: ID of the box
-    :param user_id: Who is querying?
+    Get the specific box with box ID
+    Inputs:
+        - box_id: ID of the box
+        - user_id: Who is querying?
     :return: One box matched with box_id
     """
     box = db.session.query(BoxModel).filter(BoxModel.id == box_id).first()
@@ -44,6 +47,7 @@ def get_box(user_id, box_id):
 @validate_input(schema=BoxSchema)
 def create_new_box(user_id, data):
     """
+    Allow one user created their own box
     :param user_id: who is creating this box
     :param data:
         - name: name of the box
